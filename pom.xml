@@ -8,10 +8,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mansep</groupId>
-	<artifactId>athentication</artifactId>
+	<artifactId>agenda</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>athentication</name>
-	<description>Ejemplo de autenticación JWT</description>
+	<name>agenda</name>
+	<description>Agenda virtual para toma de horas medicas, trabajo de titulo Manuel Sepúlveda Durán</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -55,6 +55,16 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.10.3</version>
 		</dependency>
 	</dependencies>
 

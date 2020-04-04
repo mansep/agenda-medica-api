@@ -1,92 +1,68 @@
 package com.mansep.agenda.entity;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import com.mansep.agenda.dto.UserDto;
+import com.mansep.agenda.entity.abstrct.AbstractBaseEntity;
+import com.mansep.agenda.entity.enums.Role;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private Date created_at;
-    private Date updated_at;
-
-    public long getId() {
-        return this.id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Date getUpdatedAt() {
-        return updated_at;
-    }
-
-    public void setUpdatedAt(Date updated_at) {
-        this.updated_at = updated_at;
-    }
-
-    public Date getCreatedAt() {
-        return this.created_at;
-    }
-
-    public void setCreatedAt(Date created_at) {
-        this.created_at = created_at;
-    }
+public class User extends AbstractBaseEntity implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     private String rut;
     private String password;
-    private String nombres;
-    private String apellidos;
+    private String name;
+    private String lastName;
     private String email;
-    private String telefono;
+    private String phone;
+    private String mobile;
+    private Date dateBirth;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLES", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
-            @JoinColumn(name = "ROLE_ID") })
-    private Set<Role> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20, columnDefinition = "varchar(20) default 'USER'")
+    private Role role;
 
     public User() {
     }
 
     public User(UserDto user) {
-        Long idUser = user.getId();
-        setId(idUser);
-        setApellidos(user.getApellidos());
+        this.setId(user.getId());
+        setLastName(user.getLastName());
         setEmail(user.getEmail());
-        setNombres(user.getNombres());
+        setName(user.getName());
         setRut(user.getRut());
-        setTelefono(user.getTelefono());
-        setRoles(user.getRoles());
+        setPhone(user.getPhone());
+        setDateBirth(user.getDateBirth());
+        setRole(user.getRole());
+        setCreatedAt(user.getCreatedAt());
+        setUpdatedAt(user.getUpdatedAt());
+        this.setStatus(user.getStatus());
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Date getDateBirth() {
+        return dateBirth;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setDateBirth(Date dateBirth) {
+        this.dateBirth = dateBirth;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -97,20 +73,20 @@ public class User {
         this.email = email;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getNombres() {
-        return nombres;
+    public String getName() {
+        return name;
     }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -129,15 +105,35 @@ public class User {
         this.rut = rut;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public UserDto toDto() {
         UserDto user = new UserDto();
-        user.setApellidos(apellidos);
+        user.setLastName(lastName);
         user.setEmail(email);
         user.setId(this.getId());
-        user.setNombres(nombres);
+        user.setName(name);
         user.setRut(rut);
-        user.setTelefono(telefono);
+        user.setPhone(phone);
+        user.setMobile(mobile);
+        user.setRole(this.getRole());
+        user.setStatus(this.getStatus());
+        user.setDateBirth(dateBirth);
         return user;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }

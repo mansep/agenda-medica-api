@@ -3,6 +3,9 @@ package com.mansep.agenda.controller;
 import com.mansep.agenda.dto.auth.AuthLoginDto;
 import com.mansep.agenda.dto.auth.AuthResponseDto;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.mansep.agenda.dto.UserDto;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.ForbiddenException;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -28,14 +32,18 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody AuthLoginDto login) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody AuthLoginDto login) {
         try {
-            return ResponseEntity.ok(authService.login(login));
+            AuthResponseDto authDto = authService.login(login);
+            Map<String, Object> response = new LinkedHashMap<String, Object>();
+            response.put("user", authDto.getUserDto());
+            response.put("token", authDto.getToken());
+            return ResponseEntity.ok(response);
         } catch (ForbiddenException e) {
-            LOGGER.error("Usuario o password invalido", e);
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+            LOGGER.error("Error al iniciar sesión", e);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("Error al crear usuerio", e);
+            LOGGER.error("Error al iniciar sesión", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -45,8 +53,8 @@ public class AuthController {
         try {
             return ResponseEntity.ok(authService.register(user));
         } catch (BadRequestException e) {
-            LOGGER.error(e.toString());
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+            LOGGER.error("Error al crear usuerio", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.error("Error al crear usuerio", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

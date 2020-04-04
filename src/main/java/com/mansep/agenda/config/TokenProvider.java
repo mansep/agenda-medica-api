@@ -1,18 +1,13 @@
 package com.mansep.agenda.config;
 
 import io.jsonwebtoken.*;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.function.Function;
 
-import com.mansep.agenda.entity.Role;
 import com.mansep.agenda.entity.User;
 
 @Component
@@ -44,14 +39,10 @@ public class TokenProvider implements Serializable {
 
     public String generateToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getRut());
-        List<String> roles = new ArrayList<String>();
-        user.getRoles().forEach((Role rol) -> {
-            roles.add(rol.getName());
-        });
-        claims.put(Constants.AUTHORITIES_KEY, Arrays.asList(new SimpleGrantedAuthority(String.join(",", roles))));
+        claims.put("id", String.valueOf(user.getId()));
+        claims.put("rol", user.getRole().toString());
 
-        return Jwts.builder().setClaims(claims)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder().setClaims(claims).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + Constants.ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
                 .signWith(SignatureAlgorithm.HS256, Constants.SIGNING_KEY).compact();
     }

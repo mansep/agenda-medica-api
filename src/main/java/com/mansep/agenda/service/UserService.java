@@ -12,7 +12,7 @@ public interface UserService {
     User create(UserDto user) throws BadRequestException, Exception;
     User update(Long id, UserDto user) throws NotFoundException;
     List<User> findAll();
-    void delete(Long id);
+    void delete(Long id) throws NotFoundException;
     User findOne(String rut) throws NotFoundException;
     User findById(Long id) throws NotFoundException;
 }

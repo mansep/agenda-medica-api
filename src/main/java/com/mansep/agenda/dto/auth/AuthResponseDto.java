@@ -1,8 +1,14 @@
 package com.mansep.agenda.dto.auth;
 
+import java.io.Serializable;
+
 import com.mansep.agenda.dto.UserDto;
 
-public class AuthResponseDto {
+public class AuthResponseDto implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private String token;
     private UserDto user;
 

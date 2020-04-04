@@ -1,52 +1,67 @@
 package com.mansep.agenda.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import com.mansep.agenda.entity.Role;
+import com.mansep.agenda.dto.abstrct.AbstractBaseDto;
 import com.mansep.agenda.entity.User;
+import com.mansep.agenda.entity.enums.Role;
 
-public class UserDto {
-    private long id;
+public class UserDto extends AbstractBaseDto implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private String rut;
     private String password;
-    private String nombres;
-    private String apellidos;
+    private String name;
+    private String lastName;
     private String email;
-    private String telefono;
-    private Set<Role> roles;
-    
-    public long getId() {
-        return id;
+    private String phone;
+    private String mobile;
+    private Role role;
+    private Date dateBirth;
+
+    public String getMobile() {
+        return mobile;
     }
 
-    public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	public void setId(long id) {
-        this.id = id;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public String getPassword() {
-        return password;
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public String getPassword() {
+        return password;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public Date getDateBirth() {
+        return dateBirth;
+    }
+
+    public void setDateBirth(Date dateBirth) {
+        this.dateBirth = dateBirth;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -57,20 +72,20 @@ public class UserDto {
         this.email = email;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getNombres() {
-        return nombres;
+    public String getName() {
+        return name;
     }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getRut() {
@@ -83,7 +98,8 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "UserDto [id=" + id + ", rut=" + rut + ", nombres=" + nombres + ", apellidos=" + apellidos + "]";
+        return "UserDto [id=" + this.getId() + ", rut=" + rut + ", name=" + name + ", lastName=" + lastName
+                + "]";
     }
 
     public static List<UserDto> toListDto(List<User> users) {
