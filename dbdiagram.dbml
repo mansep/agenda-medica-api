@@ -46,6 +46,47 @@ Table medical_center as mc {
   updated_at timestamp
 }
 
+Table medial_building as mb {
+  id int [pk, increment]
+  code varchar(10) [not null, unique]
+  name varchar(200) [not null]
+  medical_center_id int [ref: > mc.id, not null]
+  status status [not null, default: 'ACTIVE']
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp
+}
+
+Table medical_office as mo {
+  id int [pk, increment]
+  code varchar(10) [not null, unique]
+  floor varchar(20) [not null]
+  medial_building_id int [ref: > mb.id, not null]
+  status status [not null, default: 'ACTIVE']
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp
+}
+
+
+Table medical_appointment as ma {
+  id int [pk, increment]
+  schedule datetime [not null]
+  user_doctor_id int [ref: > u.id, not null]
+  medical_office_id int [ref: > mo.id,not null]
+  status status [not null, default: 'ACTIVE']
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp
+}
+
+
+Table medical_appointment_reserved as ums {
+  id int [pk, increment]
+  medical_appointment_id int [ref: > ma.id, not null]
+  user_id int [ref: > u.id, not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp
+  
+  Note: 'Reserva de cita medica'
+}
 
 Table user_medical_speciality as ums {
   id int [pk, increment]
