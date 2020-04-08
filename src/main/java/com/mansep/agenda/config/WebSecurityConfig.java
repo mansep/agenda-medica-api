@@ -44,9 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
                 .addFilterAfter(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
-                        "/configuration/security", "/swagger-ui.html", "/webjars/**", "/actuator/**", "/auth/**")
-                .permitAll().anyRequest().authenticated();
+                .authorizeRequests()
+                .antMatchers("/api-docs", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/**").permitAll()
+                .anyRequest().authenticated();
     }
 
     @Bean
