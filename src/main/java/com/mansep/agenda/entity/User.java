@@ -19,12 +19,19 @@ public class User extends AbstractBaseEntity implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    @Column(nullable = false, unique = true, length = 9)
     private String rut;
+    @Column(nullable = false, length = 50)
     private String password;
+    @Column(nullable = false, length = 200)
     private String name;
+    @Column(nullable = false, length = 200)
     private String lastName;
+    @Column(nullable = false, unique = true, length = 200)
     private String email;
+    @Column(length = 20)
     private String phone;
+    @Column(length = 20)
     private String mobile;
     private Date dateBirth;
 

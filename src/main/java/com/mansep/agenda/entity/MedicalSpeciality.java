@@ -1,5 +1,6 @@
 package com.mansep.agenda.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import com.mansep.agenda.dto.MedicalSpecialityDto;
@@ -14,7 +15,9 @@ public class MedicalSpeciality extends AbstractBaseEntity implements Serializabl
      */
     private static final long serialVersionUID = 1L;
 
+    @Column(length = 200, nullable = false)
     private String name;
+    @Column(length = 10, unique = true, nullable = false)
     private String code;
 
     public MedicalSpeciality() {
@@ -28,7 +31,6 @@ public class MedicalSpeciality extends AbstractBaseEntity implements Serializabl
         setUpdatedAt(mSpeciality.getUpdatedAt());
         this.setStatus(mSpeciality.getStatus());
     }
-
 
     public MedicalSpecialityDto toDto() {
         MedicalSpecialityDto mSpeciality = new MedicalSpecialityDto();

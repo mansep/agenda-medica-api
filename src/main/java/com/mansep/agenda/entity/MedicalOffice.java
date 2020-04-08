@@ -1,6 +1,7 @@
 package com.mansep.agenda.entity;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -17,8 +18,11 @@ public class MedicalOffice extends AbstractBaseEntity implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    @Column(length = 200, nullable = false)
     private String name;
+    @Column(length = 10, unique = true, nullable = false)
     private String code;
+    @Column(length = 20, nullable = true)
     private String floor;
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private MedicalBuilding medicalBuilding;
@@ -36,7 +40,6 @@ public class MedicalOffice extends AbstractBaseEntity implements Serializable {
         setUpdatedAt(mOffice.getUpdatedAt());
         this.setStatus(mOffice.getStatus());
     }
-
 
     public MedicalOfficeDto toDto() {
         MedicalOfficeDto mOffice = new MedicalOfficeDto();

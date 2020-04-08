@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserMedicalSpecialityRepository extends JpaRepository<UserMedicalSpeciality, Long> {
     List<UserMedicalSpeciality> findByMedicalSpeciality(MedicalSpeciality medicalSpeciality);
-    List<UserMedicalSpeciality> findByUser(User userDoctor);
+    List<UserMedicalSpeciality> findByUserDoctor(User userDoctor);
 }

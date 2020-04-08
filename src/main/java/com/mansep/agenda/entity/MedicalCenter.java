@@ -1,5 +1,6 @@
 package com.mansep.agenda.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import com.mansep.agenda.dto.MedicalCenterDto;
@@ -14,10 +15,15 @@ public class MedicalCenter extends AbstractBaseEntity implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    @Column(length = 200, nullable = false)
     private String name;
+    @Column(length = 10, unique = true, nullable = false)
     private String code;
+    @Column(length = 200, nullable = false)
     private String address;
+    @Column(length = 20, nullable = true)
     private String phone;
+    @Column(length = 200, nullable = true)
     private String email;
 
     public MedicalCenter() {
@@ -34,7 +40,6 @@ public class MedicalCenter extends AbstractBaseEntity implements Serializable {
         setUpdatedAt(mCenter.getUpdatedAt());
         this.setStatus(mCenter.getStatus());
     }
-
 
     public MedicalCenterDto toDto() {
         MedicalCenterDto mCenter = new MedicalCenterDto();
