@@ -10,9 +10,14 @@ import com.mansep.agenda.exception.NotFoundException;
 public interface MedicalSpecialityService {
 
     MedicalSpeciality create(MedicalSpecialityDto mSpeciality) throws BadRequestException, Exception;
+
     MedicalSpeciality update(Long id, MedicalSpecialityDto mSpeciality) throws NotFoundException;
+
     List<MedicalSpeciality> findAll();
+
     void delete(Long id) throws NotFoundException;
+
     MedicalSpeciality findOne(String code) throws NotFoundException;
+
     MedicalSpeciality findById(Long id) throws NotFoundException;
 }
