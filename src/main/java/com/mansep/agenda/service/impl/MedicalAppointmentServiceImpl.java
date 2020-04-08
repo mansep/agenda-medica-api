@@ -30,7 +30,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 
 	@Override
 	public MedicalAppointment findOne(Date schedule, MedicalOffice mOffice) {
-		return mAppointmentRepository.findByScheduleAndOffice(schedule, mOffice);
+		return mAppointmentRepository.findByScheduleAndMedicalOffice(schedule, mOffice);
 	}
 
 	@Override

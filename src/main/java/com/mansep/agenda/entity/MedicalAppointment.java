@@ -3,7 +3,6 @@ package com.mansep.agenda.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.mansep.agenda.dto.MedicalAppointmentDto;
@@ -23,7 +22,6 @@ public class MedicalAppointment extends AbstractBaseEntity implements Serializab
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private MedicalOffice medicalOffice;
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="user_doctor_id")
     private User userDoctor;
 
     public MedicalAppointment() {

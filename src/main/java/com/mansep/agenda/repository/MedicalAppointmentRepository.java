@@ -8,5 +8,5 @@ import com.mansep.agenda.entity.MedicalOffice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppointment, Long> {
-    MedicalAppointment findByScheduleAndOffice(Date schedule, MedicalOffice mOffice);
+    MedicalAppointment findByScheduleAndMedicalOffice(Date schedule, MedicalOffice mOffice);
 }
