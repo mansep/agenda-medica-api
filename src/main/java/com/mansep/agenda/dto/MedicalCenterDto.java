@@ -23,9 +23,9 @@ public class MedicalCenterDto extends AbstractBaseDto implements Serializable {
         return "MedicalCenterDto [id=" + this.getId() + ", code=" + code + ", name=" + name + "]";
     }
 
-    public static List<MedicalCenterDto> toListDto(List<MedicalCenter> mSpecialitys) {
+    public static List<MedicalCenterDto> toListDto(List<MedicalCenter> mCenter) {
         List<MedicalCenterDto> lu = new ArrayList<MedicalCenterDto>();
-        for (MedicalCenter mSpeciality : mSpecialitys) {
+        for (MedicalCenter mSpeciality : mCenter) {
             lu.add(mSpeciality.toDto());
         }
         return lu;

@@ -23,29 +23,29 @@ public class MedicalCenter extends AbstractBaseEntity implements Serializable {
     public MedicalCenter() {
     }
 
-    public MedicalCenter(MedicalCenterDto mSpeciality) {
-        this.setId(mSpeciality.getId());
-        setName(mSpeciality.getName());
-        setCode(mSpeciality.getCode());
-        setAddress(mSpeciality.getAddress());
-        setPhone(mSpeciality.getPhone());
-        setEmail(mSpeciality.getEmail());
-        setCreatedAt(mSpeciality.getCreatedAt());
-        setUpdatedAt(mSpeciality.getUpdatedAt());
-        this.setStatus(mSpeciality.getStatus());
+    public MedicalCenter(MedicalCenterDto mCenter) {
+        this.setId(mCenter.getId());
+        setName(mCenter.getName());
+        setCode(mCenter.getCode());
+        setAddress(mCenter.getAddress());
+        setPhone(mCenter.getPhone());
+        setEmail(mCenter.getEmail());
+        setCreatedAt(mCenter.getCreatedAt());
+        setUpdatedAt(mCenter.getUpdatedAt());
+        this.setStatus(mCenter.getStatus());
     }
 
 
     public MedicalCenterDto toDto() {
-        MedicalCenterDto mSpeciality = new MedicalCenterDto();
-        mSpeciality.setId(this.getId());
-        mSpeciality.setStatus(this.getStatus());
-        mSpeciality.setName(name);
-        mSpeciality.setCode(code);
-        mSpeciality.setAddress(address);
-        mSpeciality.setPhone(phone);
-        mSpeciality.setEmail(email);
-        return mSpeciality;
+        MedicalCenterDto mCenter = new MedicalCenterDto();
+        mCenter.setId(this.getId());
+        mCenter.setStatus(this.getStatus());
+        mCenter.setName(name);
+        mCenter.setCode(code);
+        mCenter.setAddress(address);
+        mCenter.setPhone(phone);
+        mCenter.setEmail(email);
+        return mCenter;
     }
 
     public String getName() {

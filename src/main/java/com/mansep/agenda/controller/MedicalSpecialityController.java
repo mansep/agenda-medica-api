@@ -31,7 +31,6 @@ public class MedicalSpecialityController {
     @Autowired
     MedicalSpecialityService mSpecialityService;
 
-    // @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/")
     public ResponseEntity<List<MedicalSpecialityDto>> getAllMedicalSpeciality() {
         try {
@@ -43,7 +42,6 @@ public class MedicalSpecialityController {
         }
     }
 
-    // @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<MedicalSpecialityDto> getMedicalSpeciality(@PathVariable Long id) {
         try {

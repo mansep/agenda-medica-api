@@ -2,10 +2,10 @@ package com.mansep.agenda.controller;
 
 import java.util.List;
 
-import com.mansep.agenda.dto.MedicalCenterDto;
-import com.mansep.agenda.entity.MedicalCenter;
+import com.mansep.agenda.dto.MedicalBuildingDto;
+import com.mansep.agenda.entity.MedicalBuilding;
 import com.mansep.agenda.exception.NotFoundException;
-import com.mansep.agenda.service.MedicalCenterService;
+import com.mansep.agenda.service.MedicalBuildingService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,71 +23,71 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/medical-center")
-public class MedicalCenterController {
+@RequestMapping(value = "/medical-building")
+public class MedicalBuildingController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MedicalCenterController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MedicalBuildingController.class);
 
     @Autowired
-    MedicalCenterService mCenterService;
+    MedicalBuildingService mBuildingService;
 
     @GetMapping("/")
-    public ResponseEntity<List<MedicalCenterDto>> getAllMedicalCenter() {
+    public ResponseEntity<List<MedicalBuildingDto>> getAllMedicalBuilding() {
         try {
-            List<MedicalCenter> mCenters = mCenterService.findAll();
-            return ResponseEntity.ok(MedicalCenterDto.toListDto(mCenters));
+            List<MedicalBuilding> mBuildings = mBuildingService.findAll();
+            return ResponseEntity.ok(MedicalBuildingDto.toListDto(mBuildings));
         } catch (Exception e) {
-            LOGGER.error("Error al cargar centro médico", e);
+            LOGGER.error("Error al cargar edificio", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicalCenterDto> getMedicalCenter(@PathVariable Long id) {
+    public ResponseEntity<MedicalBuildingDto> getMedicalBuilding(@PathVariable Long id) {
         try {
-            MedicalCenter mCenter = mCenterService.findById(id);
-            return ResponseEntity.ok(mCenter.toDto());
+            MedicalBuilding mBuilding = mBuildingService.findById(id);
+            return ResponseEntity.ok(mBuilding.toDto());
         } catch (NotFoundException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            LOGGER.error("Error al cargar centro médico", e);
+            LOGGER.error("Error al cargar edificio", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<MedicalCenterDto> updateMedicalCenter(@PathVariable Long id,
-            @RequestBody MedicalCenterDto mCenter) {
+    public ResponseEntity<MedicalBuildingDto> updateMedicalBuilding(@PathVariable Long id,
+            @RequestBody MedicalBuildingDto mBuilding) {
         try {
-            MedicalCenter newMedicalCenter = mCenterService.update(id, mCenter);
-            return ResponseEntity.ok(newMedicalCenter.toDto());
+            MedicalBuilding newMedicalBuilding = mBuildingService.update(id, mBuilding);
+            return ResponseEntity.ok(newMedicalBuilding.toDto());
         } catch (Exception e) {
-            LOGGER.error("Error al editar centro médico", e);
+            LOGGER.error("Error al editar edificio", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteMedicalCenter(@PathVariable Long id) {
+    public ResponseEntity<Boolean> deleteMedicalBuilding(@PathVariable Long id) {
         try {
-            mCenterService.delete(id);
+            mBuildingService.delete(id);
             return ResponseEntity.ok(true);
         } catch (Exception e) {
-            LOGGER.error("Error al eliminar centro médico", e);
+            LOGGER.error("Error al eliminar edificio", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
-    public ResponseEntity<MedicalCenterDto> createMedicalCenter(@RequestBody MedicalCenterDto mCenter) {
+    public ResponseEntity<MedicalBuildingDto> createMedicalBuilding(@RequestBody MedicalBuildingDto mBuilding) {
         try {
-            MedicalCenter newMedicalCenter = mCenterService.create(mCenter);
-            return ResponseEntity.ok(newMedicalCenter.toDto());
+            MedicalBuilding newMedicalBuilding = mBuildingService.create(mBuilding);
+            return ResponseEntity.ok(newMedicalBuilding.toDto());
         } catch (Exception e) {
-            LOGGER.error("Error al crear centro médico", e);
+            LOGGER.error("Error al crear edificio", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
