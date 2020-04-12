@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,18 +30,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
-        try {
-            User newUser = userService.create(user);
-            return ResponseEntity.ok(newUser.toDto());
-        } catch (Exception e) {
-            LOGGER.error("Error al crear usuerio", e);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/")
@@ -59,6 +49,45 @@ public class UserController {
         try {
             User user = userService.findById(id);
             return ResponseEntity.ok(user.toDto());
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar usuerio", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/")
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
+        try {
+            User newUser = userService.create(user);
+            return ResponseEntity.ok(newUser.toDto());
+        } catch (Exception e) {
+            LOGGER.error("Error al crear usuerio", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto editUser) {
+        try {
+            User user = userService.update(id, editUser);
+            return ResponseEntity.ok(user.toDto());
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar usuerio", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable Long id) {
+        try {
+            userService.delete(id);
+            ;
+            return ResponseEntity.ok(true);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
