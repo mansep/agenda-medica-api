@@ -3,9 +3,6 @@ package com.mansep.agenda.controller;
 import com.mansep.agenda.dto.auth.AuthLoginDto;
 import com.mansep.agenda.dto.auth.AuthResponseDto;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.mansep.agenda.dto.UserDto;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.ForbiddenException;
@@ -32,13 +29,11 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody AuthLoginDto login) {
+
+    public ResponseEntity<AuthResponseDto> register(@RequestBody AuthLoginDto login) {
         try {
             AuthResponseDto authDto = authService.login(login);
-            Map<String, Object> response = new LinkedHashMap<String, Object>();
-            response.put("user", authDto.getUserDto());
-            response.put("token", authDto.getToken());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(authDto);
         } catch (ForbiddenException e) {
             LOGGER.error("Error al iniciar sesión", e);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
