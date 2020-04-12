@@ -12,8 +12,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
         description = "API Rest de gestión de horas médicas", 
         contact = @Contact(name = "Manuel Sepúlveda Durán", email = "mansep1991@gmail.com", url = "http://www.mansep.com/")), 
     servers = {
-        @Server(url = "http://api.dev.agenda.mansep.com", description = "DEV Server"),
-        @Server(url = "http://api.prod.agenda.mansep.com", description = "PROD Server") 
+        @Server(url = "https://agendamedica-ms.herokuapp.com", description = "DEV Server")
     }
 )
 public class OpenApiConfig {
