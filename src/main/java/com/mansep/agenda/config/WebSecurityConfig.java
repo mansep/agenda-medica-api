@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
+        http.csrf().disable().addFilterBefore(new CorsFilterConfig(), ChannelProcessingFilter.class)
                 .addFilterAfter(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/api-docs", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/**").permitAll()
