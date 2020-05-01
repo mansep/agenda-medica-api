@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -42,9 +43,10 @@ public class TokenProvider implements Serializable {
         claims.put("id", String.valueOf(user.getId()));
         claims.put("rol", user.getRole().toString());
 
+        Date expiration = new Date(System.currentTimeMillis() + Constants.ACCESS_TOKEN_VALIDITY_SECONDS * 1000);
+        String signingKey = Base64.getEncoder().encodeToString(Constants.SIGNING_KEY.getBytes());
         return Jwts.builder().setClaims(claims).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + Constants.ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
-                .signWith(SignatureAlgorithm.HS256, Constants.SIGNING_KEY).compact();
+                .setExpiration(expiration).signWith(SignatureAlgorithm.HS256, signingKey).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

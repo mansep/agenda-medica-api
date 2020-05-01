@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mansep.agenda.dto.UserDto;
 import com.mansep.agenda.entity.User;
+import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.service.UserService;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -63,8 +65,11 @@ public class UserController {
         try {
             User newUser = userService.create(user);
             return ResponseEntity.ok(newUser.toDto());
+        } catch (BadRequestException e) {
+            LOGGER.error("Error al crear usuario", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("Error al crear usuerio", e);
+            LOGGER.error("Error al crear usuario", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

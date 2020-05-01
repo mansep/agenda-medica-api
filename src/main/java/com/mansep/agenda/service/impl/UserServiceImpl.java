@@ -3,6 +3,7 @@ package com.mansep.agenda.service.impl;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 
 import com.mansep.agenda.dto.UserDto;
@@ -71,8 +72,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		if (editUser == null) {
 			throw new NotFoundException("Usuario no encontrado");
 		}
+		if (!user.getPassword().equals(null) && !user.getPassword().equals("")) {
+			user.setPassword(bcryptEncoder.encode(user.getPassword()));
+		} else {
+			user.setPassword(editUser.getPassword());
+		}
 		user.setId(editUser.getId());
-		return userRepository.save(editUser);
+		user.setCreatedAt(editUser.getCreatedAt());
+		user.setUpdatedAt(new Date());
+
+		return userRepository.save(new User(user));
 	}
 
 	@Override
@@ -89,7 +98,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			throw new BadRequestException("Email ingresado no es válido");
 		}
 
-		if (newUser.getDateBirth() == null ){
+		if (newUser.getDateBirth() == null) {
 			throw new BadRequestException("Debe ingresar fecha de nacimiento válida");
 		}
 
@@ -112,7 +121,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		if (editUser == null) {
 			throw new NotFoundException("Usuario no encontrado");
 		}
-		editUser.setStatus(Status.DELETED);;
+		editUser.setStatus(Status.DELETED);
+		;
 		userRepository.save(editUser);
 	}
 }

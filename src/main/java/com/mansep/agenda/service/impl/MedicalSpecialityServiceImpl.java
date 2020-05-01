@@ -2,6 +2,7 @@ package com.mansep.agenda.service.impl;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.mansep.agenda.dto.MedicalSpecialityDto;
 import com.mansep.agenda.entity.MedicalSpeciality;
@@ -43,7 +44,9 @@ public class MedicalSpecialityServiceImpl implements MedicalSpecialityService {
 			throw new NotFoundException("Especialidad medica no encontrada");
 		}
 		mSpeciality.setId(editMedicalSpeciality.getId());
-		return mSpecialityRepository.save(editMedicalSpeciality);
+		mSpeciality.setCreatedAt(editMedicalSpeciality.getCreatedAt());
+		mSpeciality.setUpdatedAt(new Date());
+		return mSpecialityRepository.save(new MedicalSpeciality(mSpeciality));
 	}
 
 	@Override

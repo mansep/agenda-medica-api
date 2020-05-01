@@ -21,7 +21,7 @@ public class User extends AbstractBaseEntity implements Serializable {
 
     @Column(nullable = false, unique = true, length = 9)
     private String rut;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 200)
     private String password;
     @Column(nullable = false, length = 200)
     private String name;
@@ -49,7 +49,9 @@ public class User extends AbstractBaseEntity implements Serializable {
         setName(user.getName());
         setRut(user.getRut());
         setPhone(user.getPhone());
+        setMobile(user.getMobile());
         setDateBirth(user.getDateBirth());
+        setPassword(user.getPassword());
         setRole(user.getRole());
         setCreatedAt(user.getCreatedAt());
         setUpdatedAt(user.getUpdatedAt());

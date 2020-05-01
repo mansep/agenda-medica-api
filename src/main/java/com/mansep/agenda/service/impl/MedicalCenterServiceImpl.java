@@ -2,6 +2,7 @@ package com.mansep.agenda.service.impl;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.mansep.agenda.dto.MedicalCenterDto;
 import com.mansep.agenda.entity.MedicalCenter;
@@ -43,7 +44,9 @@ public class MedicalCenterServiceImpl implements MedicalCenterService {
 			throw new NotFoundException("Centro médico no encontrado");
 		}
 		mCenter.setId(editMedicalCenter.getId());
-		return mCenterRepository.save(editMedicalCenter);
+		mCenter.setCreatedAt(editMedicalCenter.getCreatedAt());
+		mCenter.setUpdatedAt(new Date());
+		return mCenterRepository.save(new MedicalCenter(mCenter));
 	}
 
 	@Override

@@ -89,17 +89,22 @@ public class UserDto extends AbstractBaseDto implements Serializable {
     }
 
     public String getRut() {
-        return rut;
+        if (rut.equals(null)) {
+            return rut;
+        }
+        return rut.replace("-", "").replace(".", "").toUpperCase().trim();
     }
 
     public void setRut(String rut) {
+        if (!rut.equals(null)) {
+            rut = rut.replace("-", "").replace(".", "").toUpperCase().trim();
+        }
         this.rut = rut;
     }
 
     @Override
     public String toString() {
-        return "UserDto [id=" + this.getId() + ", rut=" + rut + ", name=" + name + ", lastName=" + lastName
-                + "]";
+        return "UserDto [id=" + this.getId() + ", rut=" + rut + ", name=" + name + ", lastName=" + lastName + "]";
     }
 
     public static List<UserDto> toListDto(List<User> users) {

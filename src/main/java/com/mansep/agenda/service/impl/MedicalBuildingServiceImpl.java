@@ -2,6 +2,7 @@ package com.mansep.agenda.service.impl;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.mansep.agenda.dto.MedicalBuildingDto;
 import com.mansep.agenda.entity.MedicalBuilding;
@@ -43,7 +44,9 @@ public class MedicalBuildingServiceImpl implements MedicalBuildingService {
 			throw new NotFoundException("Edificio no encontrado");
 		}
 		mBuilding.setId(editMedicalBuilding.getId());
-		return mBuildingRepository.save(editMedicalBuilding);
+		mBuilding.setCreatedAt(editMedicalBuilding.getCreatedAt());
+		mBuilding.setUpdatedAt(new Date());
+		return mBuildingRepository.save(new MedicalBuilding(mBuilding));
 	}
 
 	@Override

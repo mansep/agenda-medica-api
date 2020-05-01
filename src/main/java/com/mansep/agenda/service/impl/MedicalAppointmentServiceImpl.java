@@ -45,7 +45,9 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 			throw new NotFoundException("Hora médica no encontrada");
 		}
 		mAppointment.setId(editMedicalAppointment.getId());
-		return mAppointmentRepository.save(editMedicalAppointment);
+		mAppointment.setCreatedAt(editMedicalAppointment.getCreatedAt());
+		mAppointment.setUpdatedAt(new Date());
+		return mAppointmentRepository.save(new MedicalAppointment(mAppointment));
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.mansep.agenda.service.impl;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.mansep.agenda.dto.MedicalAppointmentReservedDto;
 import com.mansep.agenda.entity.MedicalAppointment;
@@ -44,7 +45,9 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 			throw new NotFoundException("Reserva no encontrada");
 		}
 		mAppointmentReserved.setId(editMedicalAppointmentReserved.getId());
-		return mAppointmentReservedRepository.save(editMedicalAppointmentReserved);
+		mAppointmentReserved.setCreatedAt(editMedicalAppointmentReserved.getCreatedAt());
+		mAppointmentReserved.setUpdatedAt(new Date());
+		return mAppointmentReservedRepository.save(new MedicalAppointmentReserved(mAppointmentReserved));
 	}
 
 	@Override

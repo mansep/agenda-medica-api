@@ -2,6 +2,7 @@ package com.mansep.agenda.service.impl;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.mansep.agenda.dto.MedicalOfficeDto;
 import com.mansep.agenda.entity.MedicalOffice;
@@ -43,7 +44,9 @@ public class MedicalOfficeServiceImpl implements MedicalOfficeService {
 			throw new NotFoundException("Oficina no encontrada");
 		}
 		mOffice.setId(editMedicalOffice.getId());
-		return mOfficeRepository.save(editMedicalOffice);
+		mOffice.setCreatedAt(editMedicalOffice.getCreatedAt());
+		mOffice.setUpdatedAt(new Date());
+		return mOfficeRepository.save(new MedicalOffice(mOffice));
 	}
 
 	@Override
