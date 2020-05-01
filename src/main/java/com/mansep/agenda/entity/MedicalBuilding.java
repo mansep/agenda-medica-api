@@ -1,6 +1,5 @@
 package com.mansep.agenda.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +21,7 @@ public class MedicalBuilding extends AbstractBaseEntity implements Serializable 
     private String name;
     @Column(length = 10, unique = true, nullable = false)
     private String code;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private MedicalCenter medicalCenter;
 
     public MedicalBuilding() {

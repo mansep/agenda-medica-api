@@ -7,7 +7,11 @@ import java.util.List;
 
 import com.mansep.agenda.dto.abstrct.AbstractBaseDto;
 import com.mansep.agenda.entity.User;
+import com.mansep.agenda.entity.UserMedicalCenter;
+import com.mansep.agenda.entity.UserMedicalSpeciality;
 import com.mansep.agenda.entity.enums.Role;
+
+import java.util.*;
 
 public class UserDto extends AbstractBaseDto implements Serializable {
     /**
@@ -23,6 +27,9 @@ public class UserDto extends AbstractBaseDto implements Serializable {
     private String mobile;
     private Role role;
     private Date dateBirth;
+
+    private Set<UserMedicalSpeciality> userMedicalSpecialities = new HashSet<>();
+    private Set<UserMedicalCenter> userMedicalCenters = new HashSet<>();
 
     public String getMobile() {
         return mobile;
@@ -100,6 +107,22 @@ public class UserDto extends AbstractBaseDto implements Serializable {
             rut = rut.replace("-", "").replace(".", "").toUpperCase().trim();
         }
         this.rut = rut;
+    }
+
+    public Set<UserMedicalCenter> getUserMedicalCenters() {
+        return userMedicalCenters;
+    }
+
+    public void setUserMedicalCenters(Set<UserMedicalCenter> userMedicalCenters) {
+        this.userMedicalCenters = userMedicalCenters;
+    }
+
+    public Set<UserMedicalSpeciality> getUserMedicalSpecialities() {
+        return userMedicalSpecialities;
+    }
+
+    public void setUserMedicalSpecialities(Set<UserMedicalSpeciality> userMedicalSpecialities) {
+        this.userMedicalSpecialities = userMedicalSpecialities;
     }
 
     @Override

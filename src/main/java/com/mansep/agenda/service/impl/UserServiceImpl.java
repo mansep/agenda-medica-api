@@ -61,6 +61,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return userRepository.findByRoleAndStatus(role, Status.ACTIVE);
 	}
 
+	public List<User> findAllDoctor() {
+		return userRepository.findByRoleAndStatus(Role.DOCTOR, Status.ACTIVE);
+	}
 
 	@Override
 	public User findOne(String rut) {

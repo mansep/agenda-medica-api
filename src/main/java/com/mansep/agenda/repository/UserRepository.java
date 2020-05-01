@@ -7,6 +7,8 @@ import com.mansep.agenda.entity.enums.Role;
 import com.mansep.agenda.entity.enums.Status;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByRut(String rut);
@@ -19,5 +21,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByStatus(Status status);
 
-    List<User> findByRoleAndStatus(Role role, Status status);
+    @Query("select u from User u " 
+            + "left join fetch u.userMedicalSpecialities "
+            + "left join fetch u.userMedicalCenters " 
+            + "where u.status =:estado and u.role=:rol")
+    List<User> findByRoleAndStatus(@Param("rol") Role role, @Param("estado") Status status);
 }

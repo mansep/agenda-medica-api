@@ -1,6 +1,5 @@
 package com.mansep.agenda.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -17,9 +16,9 @@ public class UserMedicalCenter extends AbstractBaseEntity implements Serializabl
      */
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private MedicalCenter medicalCenter;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User userDoctor;
 
     public UserMedicalCenter() {

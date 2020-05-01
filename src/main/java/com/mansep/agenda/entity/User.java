@@ -4,13 +4,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 import com.mansep.agenda.dto.UserDto;
 import com.mansep.agenda.entity.abstrct.AbstractBaseEntity;
 import com.mansep.agenda.entity.enums.Role;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 public class User extends AbstractBaseEntity implements Serializable {
@@ -39,6 +41,12 @@ public class User extends AbstractBaseEntity implements Serializable {
     @Column(nullable = false, length = 20, columnDefinition = "varchar(20) default 'USER'")
     private Role role;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userDoctor")
+    private Set<UserMedicalSpeciality> userMedicalSpecialities = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userDoctor")
+    private Set<UserMedicalCenter> userMedicalCenters = new HashSet<>();
+
     public User() {
     }
 
@@ -55,6 +63,9 @@ public class User extends AbstractBaseEntity implements Serializable {
         setRole(user.getRole());
         setCreatedAt(user.getCreatedAt());
         setUpdatedAt(user.getUpdatedAt());
+        setUserMedicalCenters(user.getUserMedicalCenters());
+        setUserMedicalSpecialities(user.getUserMedicalSpecialities());
+
         this.setStatus(user.getStatus());
     }
 
@@ -134,6 +145,8 @@ public class User extends AbstractBaseEntity implements Serializable {
         user.setRole(this.getRole());
         user.setStatus(this.getStatus());
         user.setDateBirth(dateBirth);
+        user.setUserMedicalCenters(userMedicalCenters);
+        user.setUserMedicalSpecialities(userMedicalSpecialities);
         return user;
     }
 
@@ -143,6 +156,22 @@ public class User extends AbstractBaseEntity implements Serializable {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Set<UserMedicalSpeciality> getUserMedicalSpecialities() {
+        return userMedicalSpecialities;
+    }
+
+    public void setUserMedicalSpecialities(Set<UserMedicalSpeciality> userMedicalSpecialities) {
+        this.userMedicalSpecialities = userMedicalSpecialities;
+    }
+
+    public Set<UserMedicalCenter> getUserMedicalCenters() {
+        return userMedicalCenters;
+    }
+
+    public void setUserMedicalCenters(Set<UserMedicalCenter> userMedicalCenters) {
+        this.userMedicalCenters = userMedicalCenters;
     }
 
 }

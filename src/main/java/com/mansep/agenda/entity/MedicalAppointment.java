@@ -1,6 +1,5 @@
 package com.mansep.agenda.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -19,9 +18,9 @@ public class MedicalAppointment extends AbstractBaseEntity implements Serializab
     private static final long serialVersionUID = 1L;
 
     private Date schedule;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private MedicalOffice medicalOffice;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User userDoctor;
 
     public MedicalAppointment() {
