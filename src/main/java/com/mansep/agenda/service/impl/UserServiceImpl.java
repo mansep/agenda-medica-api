@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.mansep.agenda.dto.UserDto;
 import com.mansep.agenda.entity.User;
+import com.mansep.agenda.entity.enums.Role;
 import com.mansep.agenda.entity.enums.Status;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
@@ -55,6 +56,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		userRepository.findAll().iterator().forEachRemaining(list::add);
 		return list;
 	}
+
+	public List<User> findByRole(Role role) {
+		return userRepository.findByRoleAndStatus(role, Status.ACTIVE);
+	}
+
 
 	@Override
 	public User findOne(String rut) {

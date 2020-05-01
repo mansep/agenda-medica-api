@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mansep.agenda.dto.UserDto;
 import com.mansep.agenda.entity.User;
+import com.mansep.agenda.entity.enums.Role;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 
@@ -20,4 +21,6 @@ public interface UserService {
     User findOne(String rut) throws NotFoundException;
 
     User findById(Long id) throws NotFoundException;
+
+    List<User> findByRole(Role role);
 }

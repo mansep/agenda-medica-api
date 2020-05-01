@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mansep.agenda.dto.UserDto;
 import com.mansep.agenda.entity.User;
+import com.mansep.agenda.entity.enums.Role;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.service.UserService;
@@ -40,7 +41,19 @@ public class UserController {
             List<User> users = userService.findAll();
             return ResponseEntity.ok(UserDto.toListDto(users));
         } catch (Exception e) {
-            LOGGER.error("Error al cargar usuerio", e);
+            LOGGER.error("Error al cargar usuario", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/roles/{role}")
+    public ResponseEntity<List<UserDto>> getAllUserByRole(@PathVariable Role role) {
+        try {
+            List<User> users = userService.findByRole(role);
+            return ResponseEntity.ok(UserDto.toListDto(users));
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar usuario", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -54,7 +67,7 @@ public class UserController {
         } catch (NotFoundException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            LOGGER.error("Error al cargar usuerio", e);
+            LOGGER.error("Error al cargar usuario", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -81,7 +94,7 @@ public class UserController {
             User user = userService.update(id, editUser);
             return ResponseEntity.ok(user.toDto());
         } catch (Exception e) {
-            LOGGER.error("Error al cargar usuerio", e);
+            LOGGER.error("Error al cargar usuario", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -96,7 +109,7 @@ public class UserController {
         } catch (NotFoundException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            LOGGER.error("Error al cargar usuerio", e);
+            LOGGER.error("Error al cargar usuario", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

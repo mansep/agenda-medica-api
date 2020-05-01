@@ -48,10 +48,10 @@ public class AuthController {
         try {
             return ResponseEntity.ok(authService.register(user));
         } catch (BadRequestException e) {
-            LOGGER.error("Error al crear usuerio", e);
+            LOGGER.error("Error al crear usuario", e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("Error al crear usuerio", e);
+            LOGGER.error("Error al crear usuario", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
