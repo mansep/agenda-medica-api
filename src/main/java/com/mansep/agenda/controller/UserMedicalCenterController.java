@@ -3,6 +3,7 @@ package com.mansep.agenda.controller;
 import java.util.List;
 
 import com.mansep.agenda.dto.UserMedicalCenterDto;
+import com.mansep.agenda.dto.UserMedicalCentersDto;
 import com.mansep.agenda.entity.UserMedicalCenter;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.service.UserMedicalCenterService;
@@ -69,6 +70,20 @@ public class UserMedicalCenterController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/user/bulk")
+    public ResponseEntity<UserMedicalCentersDto> updateUserMedicalCenters(
+            @RequestBody UserMedicalCentersDto userMedicalCenters) {
+        try {
+            UserMedicalCentersDto newUserMedicalCenter = userMedicalCenterService
+                    .saveMedicalCenters(userMedicalCenters);
+            return ResponseEntity.ok(newUserMedicalCenter);
+        } catch (Exception e) {
+            LOGGER.error("Error al editar centro médico", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteUserMedicalCenter(@PathVariable Long id) {
         try {
@@ -82,7 +97,8 @@ public class UserMedicalCenterController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
-    public ResponseEntity<UserMedicalCenterDto> createUserMedicalCenter(@RequestBody UserMedicalCenterDto mAppointmentReserved) {
+    public ResponseEntity<UserMedicalCenterDto> createUserMedicalCenter(
+            @RequestBody UserMedicalCenterDto mAppointmentReserved) {
         try {
             UserMedicalCenter newUserMedicalCenter = userMedicalCenterService.create(mAppointmentReserved);
             return ResponseEntity.ok(newUserMedicalCenter.toDto());

@@ -4,22 +4,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mansep.agenda.dto.abstrct.AbstractBaseDto;
 import com.mansep.agenda.entity.UserMedicalCenter;
 import com.mansep.agenda.entity.User;
 
-public class UserMedicalCenterDto extends AbstractBaseDto implements Serializable {
+public class UserMedicalCentersDto implements Serializable {
     /**
      *
      */
     private static final long serialVersionUID = 1L;
 
-    private MedicalCenterDto medicalCenter;
+    private List<MedicalCenterDto> medicalCenters;
     private User userDoctor;
 
     @Override
     public String toString() {
-        return "UserMedicalCenterDto [id=" + this.getId() + "]";
+        return "UserMedicalCentersDto []";
     }
 
     public static List<UserMedicalCenterDto> toListDto(List<UserMedicalCenter> userMedicalCenters) {
@@ -30,12 +29,12 @@ public class UserMedicalCenterDto extends AbstractBaseDto implements Serializabl
         return lu;
     }
 
-    public MedicalCenterDto getMedicalCenter() {
-        return medicalCenter;
+    public List<MedicalCenterDto> getMedicalCenters() {
+        return medicalCenters;
     }
 
-    public void setMedicalCenter(MedicalCenterDto medicalCenter) {
-        this.medicalCenter = medicalCenter;
+    public void setMedicalCenters(List<MedicalCenterDto> medicalCenters) {
+        this.medicalCenters = medicalCenters;
     }
 
     public User getUserDoctor() {

@@ -7,8 +7,6 @@ import java.util.List;
 
 import com.mansep.agenda.dto.abstrct.AbstractBaseDto;
 import com.mansep.agenda.entity.User;
-import com.mansep.agenda.entity.UserMedicalCenter;
-import com.mansep.agenda.entity.UserMedicalSpeciality;
 import com.mansep.agenda.entity.enums.Role;
 
 import java.util.*;
@@ -28,8 +26,8 @@ public class UserDto extends AbstractBaseDto implements Serializable {
     private Role role;
     private Date dateBirth;
 
-    private Set<UserMedicalSpeciality> userMedicalSpecialities = new HashSet<>();
-    private Set<UserMedicalCenter> userMedicalCenters = new HashSet<>();
+    private Set<UserMedicalSpecialityDto> userMedicalSpecialities = new HashSet<>();
+    private Set<UserMedicalCenterDto> userMedicalCenters = new HashSet<>();
 
     public String getMobile() {
         return mobile;
@@ -109,19 +107,19 @@ public class UserDto extends AbstractBaseDto implements Serializable {
         this.rut = rut;
     }
 
-    public Set<UserMedicalCenter> getUserMedicalCenters() {
+    public Set<UserMedicalCenterDto> getUserMedicalCenters() {
         return userMedicalCenters;
     }
 
-    public void setUserMedicalCenters(Set<UserMedicalCenter> userMedicalCenters) {
+    public void setUserMedicalCenters(Set<UserMedicalCenterDto> userMedicalCenters) {
         this.userMedicalCenters = userMedicalCenters;
     }
 
-    public Set<UserMedicalSpeciality> getUserMedicalSpecialities() {
+    public Set<UserMedicalSpecialityDto> getUserMedicalSpecialities() {
         return userMedicalSpecialities;
     }
 
-    public void setUserMedicalSpecialities(Set<UserMedicalSpeciality> userMedicalSpecialities) {
+    public void setUserMedicalSpecialities(Set<UserMedicalSpecialityDto> userMedicalSpecialities) {
         this.userMedicalSpecialities = userMedicalSpecialities;
     }
 

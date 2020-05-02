@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import com.mansep.agenda.dto.UserDto;
+import com.mansep.agenda.dto.UserMedicalCenterDto;
+import com.mansep.agenda.dto.UserMedicalSpecialityDto;
 import com.mansep.agenda.entity.abstrct.AbstractBaseEntity;
 import com.mansep.agenda.entity.enums.Role;
 
@@ -51,6 +53,22 @@ public class User extends AbstractBaseEntity implements Serializable {
     }
 
     public User(UserDto user) {
+        Set<UserMedicalCenter> center = null;
+        if (user.getUserMedicalCenters() != null) {
+            center = new HashSet<UserMedicalCenter>();
+            for (UserMedicalCenterDto dto : user.getUserMedicalCenters()) {
+                center.add(new UserMedicalCenter(dto));
+            }
+        }
+
+        Set<UserMedicalSpeciality> speciality = null;
+        if (user.getUserMedicalCenters() != null) {
+            speciality = new HashSet<UserMedicalSpeciality>();
+            for (UserMedicalSpecialityDto dto : user.getUserMedicalSpecialities()) {
+                speciality.add(new UserMedicalSpeciality(dto));
+            }
+        }
+
         this.setId(user.getId());
         setLastName(user.getLastName());
         setEmail(user.getEmail());
@@ -63,9 +81,8 @@ public class User extends AbstractBaseEntity implements Serializable {
         setRole(user.getRole());
         setCreatedAt(user.getCreatedAt());
         setUpdatedAt(user.getUpdatedAt());
-        setUserMedicalCenters(user.getUserMedicalCenters());
-        setUserMedicalSpecialities(user.getUserMedicalSpecialities());
-
+        setUserMedicalCenters(center);
+        setUserMedicalSpecialities(speciality);
         this.setStatus(user.getStatus());
     }
 
@@ -134,6 +151,26 @@ public class User extends AbstractBaseEntity implements Serializable {
     }
 
     public UserDto toDto() {
+
+        Set<UserMedicalCenterDto> center = null;
+        Set<UserMedicalSpecialityDto> speciality = null;
+
+        if (userMedicalCenters != null) {
+            center = new HashSet<UserMedicalCenterDto>();
+            for (UserMedicalCenter entity : userMedicalCenters) {
+                entity.setUserDoctor(null);
+                center.add(entity.toDto());
+            }
+        }
+
+        if (userMedicalSpecialities != null) {
+            speciality = new HashSet<UserMedicalSpecialityDto>();
+            for (UserMedicalSpeciality entity : userMedicalSpecialities) {
+                entity.setUserDoctor(null);
+                speciality.add(entity.toDto());
+            }
+        }
+
         UserDto user = new UserDto();
         user.setLastName(lastName);
         user.setEmail(email);
@@ -145,8 +182,8 @@ public class User extends AbstractBaseEntity implements Serializable {
         user.setRole(this.getRole());
         user.setStatus(this.getStatus());
         user.setDateBirth(dateBirth);
-        user.setUserMedicalCenters(userMedicalCenters);
-        user.setUserMedicalSpecialities(userMedicalSpecialities);
+        user.setUserMedicalCenters(center);
+        user.setUserMedicalSpecialities(speciality);
         return user;
     }
 

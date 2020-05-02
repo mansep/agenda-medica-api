@@ -2,6 +2,7 @@ package com.mansep.agenda.controller;
 
 import java.util.List;
 
+import com.mansep.agenda.dto.UserMedicalSpecialitiesDto;
 import com.mansep.agenda.dto.UserMedicalSpecialityDto;
 import com.mansep.agenda.entity.UserMedicalSpeciality;
 import com.mansep.agenda.exception.NotFoundException;
@@ -34,8 +35,8 @@ public class UserMedicalSpecialityController {
     @GetMapping("/")
     public ResponseEntity<List<UserMedicalSpecialityDto>> getAllUserMedicalSpeciality() {
         try {
-            List<UserMedicalSpeciality> mAppointmentReserveds = userMedicalSpecialityService.findAll();
-            return ResponseEntity.ok(UserMedicalSpecialityDto.toListDto(mAppointmentReserveds));
+            List<UserMedicalSpeciality> userMedicalSpecialitys = userMedicalSpecialityService.findAll();
+            return ResponseEntity.ok(UserMedicalSpecialityDto.toListDto(userMedicalSpecialitys));
         } catch (Exception e) {
             LOGGER.error("Error al cargar especialidad de doctor", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,8 +46,8 @@ public class UserMedicalSpecialityController {
     @GetMapping("/{id}")
     public ResponseEntity<UserMedicalSpecialityDto> getUserMedicalSpeciality(@PathVariable Long id) {
         try {
-            UserMedicalSpeciality mAppointmentReserved = userMedicalSpecialityService.findById(id);
-            return ResponseEntity.ok(mAppointmentReserved.toDto());
+            UserMedicalSpeciality userMedicalSpeciality = userMedicalSpecialityService.findById(id);
+            return ResponseEntity.ok(userMedicalSpeciality.toDto());
         } catch (NotFoundException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -58,10 +59,25 @@ public class UserMedicalSpecialityController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UserMedicalSpecialityDto> updateUserMedicalSpeciality(@PathVariable Long id,
-            @RequestBody UserMedicalSpecialityDto mAppointmentReserved) {
+            @RequestBody UserMedicalSpecialityDto userMedicalSpeciality) {
         try {
-            UserMedicalSpeciality newUserMedicalSpeciality = userMedicalSpecialityService.update(id, mAppointmentReserved);
+            UserMedicalSpeciality newUserMedicalSpeciality = userMedicalSpecialityService.update(id,
+                    userMedicalSpeciality);
             return ResponseEntity.ok(newUserMedicalSpeciality.toDto());
+        } catch (Exception e) {
+            LOGGER.error("Error al editar especialidad de doctor", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/user/bulk")
+    public ResponseEntity<UserMedicalSpecialitiesDto> updateUserMedicalSpecialities(
+            @RequestBody UserMedicalSpecialitiesDto userMedicalSpecialities) {
+        try {
+            UserMedicalSpecialitiesDto newUserMedicalSpeciality = userMedicalSpecialityService
+                    .saveMedicalSpecialities(userMedicalSpecialities);
+            return ResponseEntity.ok(newUserMedicalSpeciality);
         } catch (Exception e) {
             LOGGER.error("Error al editar especialidad de doctor", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -82,9 +98,10 @@ public class UserMedicalSpecialityController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
-    public ResponseEntity<UserMedicalSpecialityDto> createUserMedicalSpeciality(@RequestBody UserMedicalSpecialityDto mAppointmentReserved) {
+    public ResponseEntity<UserMedicalSpecialityDto> createUserMedicalSpeciality(
+            @RequestBody UserMedicalSpecialityDto userMedicalSpeciality) {
         try {
-            UserMedicalSpeciality newUserMedicalSpeciality = userMedicalSpecialityService.create(mAppointmentReserved);
+            UserMedicalSpeciality newUserMedicalSpeciality = userMedicalSpecialityService.create(userMedicalSpeciality);
             return ResponseEntity.ok(newUserMedicalSpeciality.toDto());
         } catch (Exception e) {
             LOGGER.error("Error al crear especialidad de doctor", e);

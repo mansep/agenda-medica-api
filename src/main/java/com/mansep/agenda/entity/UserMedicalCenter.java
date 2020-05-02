@@ -37,7 +37,7 @@ public class UserMedicalCenter extends AbstractBaseEntity implements Serializabl
         userMedicalCenter.setId(this.getId());
         userMedicalCenter.setStatus(this.getStatus());
         userMedicalCenter.setUserDoctor(userDoctor);
-        userMedicalCenter.setMedicalCenter(medicalCenter);
+        userMedicalCenter.setMedicalCenter(medicalCenter.toDto());
         return userMedicalCenter;
     }
 

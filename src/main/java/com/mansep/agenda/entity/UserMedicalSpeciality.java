@@ -37,7 +37,7 @@ public class UserMedicalSpeciality extends AbstractBaseEntity implements Seriali
         userMedicalSpeciality.setId(this.getId());
         userMedicalSpeciality.setStatus(this.getStatus());
         userMedicalSpeciality.setUserDoctor(userDoctor);
-        userMedicalSpeciality.setMedicalSpeciality(medicalSpeciality);
+        userMedicalSpeciality.setMedicalSpeciality(medicalSpeciality.toDto());
         return userMedicalSpeciality;
     }
 
