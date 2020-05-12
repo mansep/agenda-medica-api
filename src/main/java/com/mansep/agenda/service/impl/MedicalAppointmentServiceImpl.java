@@ -10,7 +10,6 @@ import com.mansep.agenda.dto.MedicalAppointmentAvailabilityDto;
 import com.mansep.agenda.dto.MedicalAppointmentDto;
 import com.mansep.agenda.entity.MedicalAppointment;
 import com.mansep.agenda.entity.MedicalOffice;
-import com.mansep.agenda.entity.User;
 import com.mansep.agenda.entity.enums.Status;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
@@ -33,8 +32,8 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 	}
 
 	@Override
-	public MedicalAppointment findOne(Date schedule, MedicalOffice mOffice, User userDoctor) {
-		return mAppointmentRepository.findByScheduleAndMedicalOfficeAndUserDoctor(schedule, mOffice, userDoctor);
+	public MedicalAppointment findOne(Date schedule, MedicalOffice mOffice) {
+		return mAppointmentRepository.findByScheduleAndMedicalOffice(schedule, mOffice);
 	}
 
 	@Override
@@ -59,9 +58,8 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 		MedicalAppointment newMedicalAppointment = new MedicalAppointment(mAppointment);
 
 		// Revisar duplicidad
-		if (this.findOne(mAppointment.getSchedule(), new MedicalOffice(mAppointment.getMedicalOffice()),
-				new User(mAppointment.getUserDoctor())) != null) {
-			throw new BadRequestException("Hora ingresada está en uso");
+		if (this.findOne(mAppointment.getSchedule(), new MedicalOffice(mAppointment.getMedicalOffice())) != null) {
+			throw new BadRequestException("Oficina ingresada está en uso");
 		}
 
 		return mAppointmentRepository.save(newMedicalAppointment);
@@ -83,9 +81,8 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 			List<MedicalAppointmentAvailabilityDto> mAppointmentsAppointmentAvailabilityDtos)
 			throws BadRequestException {
 		for (MedicalAppointmentAvailabilityDto mAppointment : mAppointmentsAppointmentAvailabilityDtos) {
-			MedicalAppointment hora = this.mAppointmentRepository.findByScheduleAndMedicalOfficeAndUserDoctor(
-					mAppointment.getSchedule(), new MedicalOffice(mAppointment.getMedicalOffice()),
-					new User(mAppointment.getUserDoctor()));
+			MedicalAppointment hora = this.mAppointmentRepository.findByScheduleAndMedicalOffice(
+					mAppointment.getSchedule(), new MedicalOffice(mAppointment.getMedicalOffice()));
 			if (hora == null) {
 				mAppointment.setAvailability(true);
 			} else {
@@ -112,7 +109,8 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 			if (current != null) {
 				DateFormat dateFormat = new SimpleDateFormat("hh:mm");
 				String strDate = dateFormat.format(current.getSchedule());
-				throw new BadRequestException("La hora " + strDate + " está en uso, vuelva a buscar disponibilidad");
+				throw new BadRequestException("La oficina " + current.getMedicalOffice().getName()
+						+ " está en uso a las " + strDate + "hrs., vuelva a buscar disponibilidad");
 			} else {
 				throw new BadRequestException("Existen horas médicas en uso, vuelva a buscar disponibilidad");
 			}
