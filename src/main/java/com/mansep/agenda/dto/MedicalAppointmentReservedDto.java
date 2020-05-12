@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.mansep.agenda.dto.abstrct.AbstractBaseDto;
 import com.mansep.agenda.entity.MedicalAppointmentReserved;
-import com.mansep.agenda.entity.MedicalAppointment;
-import com.mansep.agenda.entity.User;
 
 public class MedicalAppointmentReservedDto extends AbstractBaseDto implements Serializable {
     /**
@@ -15,8 +13,8 @@ public class MedicalAppointmentReservedDto extends AbstractBaseDto implements Se
      */
     private static final long serialVersionUID = 1L;
 
-    private MedicalAppointment medicalAppointment;
-    private User user;
+    private MedicalAppointmentDto medicalAppointment;
+    private UserDto user;
 
     @Override
     public String toString() {
@@ -32,19 +30,19 @@ public class MedicalAppointmentReservedDto extends AbstractBaseDto implements Se
         return lu;
     }
 
-    public MedicalAppointment getMedicalAppointment() {
+    public MedicalAppointmentDto getMedicalAppointment() {
         return medicalAppointment;
     }
 
-    public void setMedicalAppointment(MedicalAppointment medicalAppointment) {
+    public void setMedicalAppointment(MedicalAppointmentDto medicalAppointment) {
         this.medicalAppointment = medicalAppointment;
     }
 
-    public User getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 

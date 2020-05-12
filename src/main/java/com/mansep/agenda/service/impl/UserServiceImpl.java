@@ -18,7 +18,9 @@ import com.mansep.agenda.utils.Format;
 import com.mansep.agenda.utils.Validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -81,16 +83,30 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		if (editUser == null) {
 			throw new NotFoundException("Usuario no encontrado");
 		}
-		if (!user.getPassword().equals(null) && !user.getPassword().equals("")) {
-			user.setPassword(bcryptEncoder.encode(user.getPassword()));
+		if (user.getPassword() != null) {
+			if (!user.getPassword().equals("")) {
+				user.setPassword(bcryptEncoder.encode(user.getPassword()));
+			} else {
+				user.setPassword(editUser.getPassword());
+			}
 		} else {
 			user.setPassword(editUser.getPassword());
+		}
+
+		if (user.getRole() == null) {
+			user.setRole(editUser.getRole());
 		}
 		user.setId(editUser.getId());
 		user.setCreatedAt(editUser.getCreatedAt());
 		user.setUpdatedAt(new Date());
 
 		return userRepository.save(new User(user));
+	}
+
+	@Override
+	public User updateMe(UserDto user) throws NotFoundException {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return this.update(Long.parseLong(auth.getPrincipal().toString()), user);
 	}
 
 	@Override

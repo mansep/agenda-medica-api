@@ -24,6 +24,7 @@ public class MedicalSpeciality extends AbstractBaseEntity implements Serializabl
     }
 
     public MedicalSpeciality(MedicalSpecialityDto mSpeciality) {
+        if (mSpeciality == null) return;
         this.setId(mSpeciality.getId());
         setName(mSpeciality.getName());
         setCode(mSpeciality.getCode());

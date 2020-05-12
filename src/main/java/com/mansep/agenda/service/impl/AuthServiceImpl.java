@@ -1,10 +1,13 @@
 package com.mansep.agenda.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.mansep.agenda.dto.UserDto;
+import com.mansep.agenda.dto.auth.AuthChangePasswordDto;
 import com.mansep.agenda.dto.auth.AuthLoginDto;
 import com.mansep.agenda.dto.auth.AuthResponseDto;
 import com.mansep.agenda.entity.User;
@@ -56,5 +59,27 @@ public class AuthServiceImpl implements AuthService {
         User newUser = userService.create(user);
         return this.login(new AuthLoginDto(newUser.getRut(), user.getPassword()));
 
+    }
+
+    @Override
+    public boolean changePassword(AuthChangePasswordDto changePassword)
+            throws Exception, ForbiddenException, BadRequestException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = this.userService.findById(Long.parseLong(auth.getPrincipal().toString()));
+
+        AuthLoginDto authLogin = new AuthLoginDto();
+        authLogin.setPassword(changePassword.getPasswordCurrent());
+        authLogin.setRut(user.getRut());
+
+        try {
+            this.login(authLogin);
+        } catch (Exception e) {
+            throw new ForbiddenException("Password invalido");
+        }
+
+        user.setPassword(changePassword.getPasswordNew());
+        this.userService.update(user.getId(), user.toDto(true));
+        return true;
     }
 }

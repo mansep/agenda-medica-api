@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.mansep.agenda.dto.MedicalOfficeDto;
+import com.mansep.agenda.entity.MedicalBuilding;
 import com.mansep.agenda.entity.MedicalOffice;
 import com.mansep.agenda.entity.enums.Status;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.repository.MedicalOfficeRepository;
+import com.mansep.agenda.service.MedicalBuildingService;
 import com.mansep.agenda.service.MedicalOfficeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ public class MedicalOfficeServiceImpl implements MedicalOfficeService {
 
 	@Autowired
 	private MedicalOfficeRepository mOfficeRepository;
+
+	@Autowired
+	private MedicalBuildingService medicalBuildingService;
+
 
 	public List<MedicalOffice> findAll() {
 		List<MedicalOffice> list = new ArrayList<>();
@@ -71,5 +77,11 @@ public class MedicalOfficeServiceImpl implements MedicalOfficeService {
 		editMedicalOffice.setStatus(Status.DELETED);
 		;
 		mOfficeRepository.save(editMedicalOffice);
+	}
+
+	@Override
+	public List<MedicalOffice> findByIdMedicalBuilding(Long id) throws NotFoundException {
+		MedicalBuilding mBuilding = this.medicalBuildingService.findById(id);
+		return this.mOfficeRepository.findByMedicalBuilding(mBuilding);
 	}
 }

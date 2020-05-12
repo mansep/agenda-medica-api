@@ -2,8 +2,10 @@ package com.mansep.agenda.controller;
 
 import java.util.List;
 
+import com.mansep.agenda.dto.MedicalAppointmentAvailabilityDto;
 import com.mansep.agenda.dto.MedicalAppointmentDto;
 import com.mansep.agenda.entity.MedicalAppointment;
+import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.service.MedicalAppointmentService;
 
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/medical-appointment")
@@ -62,6 +65,9 @@ public class MedicalAppointmentController {
         try {
             MedicalAppointment newMedicalAppointment = mAppointmentService.update(id, mAppointment);
             return ResponseEntity.ok(newMedicalAppointment.toDto());
+        } catch (NotFoundException e) {
+            LOGGER.error("Error al editar hora médica", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.error("Error al editar hora médica", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -81,11 +87,48 @@ public class MedicalAppointmentController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
+    @PostMapping("/availability/")
+    public ResponseEntity<List<MedicalAppointmentAvailabilityDto>> getAvailability(
+            @RequestBody List<MedicalAppointmentAvailabilityDto> mAppointment) {
+        try {
+            List<MedicalAppointmentAvailabilityDto> newMedicalAppointment = mAppointmentService
+                    .findAvailability(mAppointment);
+            return ResponseEntity.ok(newMedicalAppointment);
+        } catch (BadRequestException e) {
+            LOGGER.error("Error al crear hora médica", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Error al crear hora médica", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
     @PostMapping("/")
-    public ResponseEntity<MedicalAppointmentDto> createMedicalAppointment(@RequestBody MedicalAppointmentDto mAppointment) {
+    public ResponseEntity<MedicalAppointmentDto> createMedicalAppointment(
+            @RequestBody MedicalAppointmentDto mAppointment) {
         try {
             MedicalAppointment newMedicalAppointment = mAppointmentService.create(mAppointment);
             return ResponseEntity.ok(newMedicalAppointment.toDto());
+        } catch (BadRequestException e) {
+            LOGGER.error("Error al crear hora médica", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Error al crear hora médica", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
+    @PostMapping("/bulk/")
+    public ResponseEntity<List<MedicalAppointmentDto>> createBulkMedicalAppointment(
+            @RequestBody List<MedicalAppointmentDto> mAppointment) {
+        try {
+            List<MedicalAppointment> newMedicalAppointment = mAppointmentService.createBulk(mAppointment);
+            return ResponseEntity.ok(MedicalAppointmentDto.toListDto(newMedicalAppointment));
+        } catch (BadRequestException e) {
+            LOGGER.error("Error al crear hora médica", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.error("Error al crear hora médica", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

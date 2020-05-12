@@ -27,23 +27,28 @@ public class MedicalAppointment extends AbstractBaseEntity implements Serializab
     }
 
     public MedicalAppointment(MedicalAppointmentDto mAppointment) {
+        if (mAppointment == null)
+            return;
         this.setId(mAppointment.getId());
         setSchedule(mAppointment.getSchedule());
-        setUserDoctor(mAppointment.getUserDoctor());
-        setMedicalOffice(mAppointment.getMedicalOffice());
+        setUserDoctor(new User(mAppointment.getUserDoctor()));
+        setMedicalOffice(new MedicalOffice(mAppointment.getMedicalOffice()));
         setCreatedAt(mAppointment.getCreatedAt());
         setUpdatedAt(mAppointment.getUpdatedAt());
         this.setStatus(mAppointment.getStatus());
     }
-
 
     public MedicalAppointmentDto toDto() {
         MedicalAppointmentDto mAppointment = new MedicalAppointmentDto();
         mAppointment.setId(this.getId());
         mAppointment.setStatus(this.getStatus());
         mAppointment.setSchedule(schedule);
-        mAppointment.setUserDoctor(userDoctor);
-        mAppointment.setMedicalOffice(medicalOffice);
+        if (userDoctor != null) {
+            mAppointment.setUserDoctor(userDoctor.toDto());
+        }
+        if (medicalOffice != null) {
+            mAppointment.setMedicalOffice(medicalOffice.toDto());
+        }
         return mAppointment;
     }
 
@@ -70,6 +75,5 @@ public class MedicalAppointment extends AbstractBaseEntity implements Serializab
     public void setUserDoctor(User userDoctor) {
         this.userDoctor = userDoctor;
     }
-
 
 }

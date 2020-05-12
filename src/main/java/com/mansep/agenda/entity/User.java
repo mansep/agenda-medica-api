@@ -53,6 +53,7 @@ public class User extends AbstractBaseEntity implements Serializable {
     }
 
     public User(UserDto user) {
+        if (user == null) return;
         Set<UserMedicalCenter> center = null;
         if (user.getUserMedicalCenters() != null) {
             center = new HashSet<UserMedicalCenter>();
@@ -148,6 +149,14 @@ public class User extends AbstractBaseEntity implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public UserDto toDto(Boolean withPassword) {
+        UserDto uDto = this.toDto();
+        if (withPassword) {
+            uDto.setPassword(password);
+        }
+        return uDto;
     }
 
     public UserDto toDto() {

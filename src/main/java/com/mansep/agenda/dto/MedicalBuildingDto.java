@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.mansep.agenda.dto.abstrct.AbstractBaseDto;
 import com.mansep.agenda.entity.MedicalBuilding;
-import com.mansep.agenda.entity.MedicalCenter;
 
 public class MedicalBuildingDto extends AbstractBaseDto implements Serializable {
     /**
@@ -15,7 +14,7 @@ public class MedicalBuildingDto extends AbstractBaseDto implements Serializable 
     private static final long serialVersionUID = 1L;
     private String name;
     private String code;
-    private MedicalCenter medicalCenter;
+    private MedicalCenterDto medicalCenter;
 
     @Override
     public String toString() {
@@ -46,11 +45,11 @@ public class MedicalBuildingDto extends AbstractBaseDto implements Serializable 
         this.code = code;
     }
 
-    public MedicalCenter getMedicalCenter() {
+    public MedicalCenterDto getMedicalCenter() {
         return medicalCenter;
     }
 
-    public void setMedicalCenter(MedicalCenter medicalCenter) {
+    public void setMedicalCenter(MedicalCenterDto medicalCenter) {
         this.medicalCenter = medicalCenter;
     }
 }

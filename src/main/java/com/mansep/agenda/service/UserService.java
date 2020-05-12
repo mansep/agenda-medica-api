@@ -14,6 +14,8 @@ public interface UserService {
 
     User update(Long id, UserDto user) throws NotFoundException;
 
+    User updateMe(UserDto user) throws NotFoundException;
+
     List<User> findAll();
 
     void delete(Long id) throws NotFoundException;

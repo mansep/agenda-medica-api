@@ -30,11 +30,15 @@ public class MedicalOffice extends AbstractBaseEntity implements Serializable {
     }
 
     public MedicalOffice(MedicalOfficeDto mOffice) {
+        if (mOffice == null)
+            return;
         this.setId(mOffice.getId());
         setName(mOffice.getName());
         setCode(mOffice.getCode());
         setFloor(mOffice.getFloor());
-        setMedicalBuilding(mOffice.getMedicalBuilding());
+        if (mOffice.getMedicalBuilding() != null) {
+            setMedicalBuilding(new MedicalBuilding(mOffice.getMedicalBuilding()));
+        }
         setCreatedAt(mOffice.getCreatedAt());
         setUpdatedAt(mOffice.getUpdatedAt());
         this.setStatus(mOffice.getStatus());
@@ -47,7 +51,9 @@ public class MedicalOffice extends AbstractBaseEntity implements Serializable {
         mOffice.setName(name);
         mOffice.setCode(code);
         mOffice.setFloor(floor);
-        mOffice.setMedicalBuilding(medicalBuilding);
+        if (medicalBuilding != null) {
+            mOffice.setMedicalBuilding(medicalBuilding.toDto());
+        }
         return mOffice;
     }
 

@@ -55,6 +55,19 @@ public class MedicalBuildingController {
         }
     }
 
+    @GetMapping("/medical-center/{id}")
+    public ResponseEntity<List<MedicalBuildingDto>> getMedicalBuildingByMedicalCenter(@PathVariable Long id) {
+        try {
+            List<MedicalBuilding> mBuilding = mBuildingService.findByIdMedicalCenter(id);
+            return ResponseEntity.ok(MedicalBuildingDto.toListDto(mBuilding));
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar edificios", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<MedicalBuildingDto> updateMedicalBuilding(@PathVariable Long id,

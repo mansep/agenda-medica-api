@@ -39,7 +39,8 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 	}
 
 	@Override
-	public MedicalAppointmentReserved update(Long id, MedicalAppointmentReservedDto mAppointmentReserved) throws NotFoundException {
+	public MedicalAppointmentReserved update(Long id, MedicalAppointmentReservedDto mAppointmentReserved)
+			throws NotFoundException {
 		MedicalAppointmentReserved editMedicalAppointmentReserved = this.findById(id);
 		if (editMedicalAppointmentReserved == null) {
 			throw new NotFoundException("Reserva no encontrada");
@@ -51,11 +52,13 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 	}
 
 	@Override
-	public MedicalAppointmentReserved create(MedicalAppointmentReservedDto mAppointmentReserved) throws BadRequestException {
+	public MedicalAppointmentReserved create(MedicalAppointmentReservedDto mAppointmentReserved)
+			throws BadRequestException {
 		MedicalAppointmentReserved newMedicalAppointmentReserved = new MedicalAppointmentReserved(mAppointmentReserved);
 
 		// Revisar duplicidad
-		MedicalAppointmentReserved ma = this.findOne(mAppointmentReserved.getMedicalAppointment());
+		MedicalAppointmentReserved ma = this
+				.findOne(new MedicalAppointment(mAppointmentReserved.getMedicalAppointment()));
 		if (ma == null) {
 			throw new BadRequestException("Hora médica no existe");
 		}
@@ -73,7 +76,6 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 			throw new NotFoundException("Reserva no encontrada");
 		}
 		editMedicalAppointmentReserved.setStatus(Status.DELETED);
-		;
 		mAppointmentReservedRepository.save(editMedicalAppointmentReserved);
 	}
 }

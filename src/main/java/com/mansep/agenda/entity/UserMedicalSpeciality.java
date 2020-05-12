@@ -25,6 +25,8 @@ public class UserMedicalSpeciality extends AbstractBaseEntity implements Seriali
     }
 
     public UserMedicalSpeciality(UserMedicalSpecialityDto userMedicalSpeciality) {
+        if (userMedicalSpeciality == null)
+            return;
         this.setId(userMedicalSpeciality.getId());
         setUserDoctor(userMedicalSpeciality.getUserDoctor());
         setCreatedAt(userMedicalSpeciality.getCreatedAt());
@@ -37,7 +39,9 @@ public class UserMedicalSpeciality extends AbstractBaseEntity implements Seriali
         userMedicalSpeciality.setId(this.getId());
         userMedicalSpeciality.setStatus(this.getStatus());
         userMedicalSpeciality.setUserDoctor(userDoctor);
-        userMedicalSpeciality.setMedicalSpeciality(medicalSpeciality.toDto());
+        if (medicalSpeciality != null) {
+            userMedicalSpeciality.setMedicalSpeciality(medicalSpeciality.toDto());
+        }
         return userMedicalSpeciality;
     }
 

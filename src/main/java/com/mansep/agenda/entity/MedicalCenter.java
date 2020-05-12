@@ -30,6 +30,7 @@ public class MedicalCenter extends AbstractBaseEntity implements Serializable {
     }
 
     public MedicalCenter(MedicalCenterDto mCenter) {
+        if (mCenter == null) return;
         this.setId(mCenter.getId());
         setName(mCenter.getName());
         setCode(mCenter.getCode());

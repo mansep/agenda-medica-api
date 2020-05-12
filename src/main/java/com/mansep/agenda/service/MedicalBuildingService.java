@@ -19,5 +19,7 @@ public interface MedicalBuildingService {
 
     MedicalBuilding findOne(String code) throws NotFoundException;
 
+    List<MedicalBuilding> findByIdMedicalCenter(Long id) throws NotFoundException;
+
     MedicalBuilding findById(Long id) throws NotFoundException;
 }

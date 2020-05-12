@@ -25,6 +25,8 @@ public class UserMedicalCenter extends AbstractBaseEntity implements Serializabl
     }
 
     public UserMedicalCenter(UserMedicalCenterDto userMedicalCenter) {
+        if (userMedicalCenter == null)
+            return;
         this.setId(userMedicalCenter.getId());
         setUserDoctor(userMedicalCenter.getUserDoctor());
         setCreatedAt(userMedicalCenter.getCreatedAt());
@@ -37,7 +39,9 @@ public class UserMedicalCenter extends AbstractBaseEntity implements Serializabl
         userMedicalCenter.setId(this.getId());
         userMedicalCenter.setStatus(this.getStatus());
         userMedicalCenter.setUserDoctor(userDoctor);
-        userMedicalCenter.setMedicalCenter(medicalCenter.toDto());
+        if (medicalCenter != null) {
+            userMedicalCenter.setMedicalCenter(medicalCenter.toDto());
+        }
         return userMedicalCenter;
     }
 

@@ -28,10 +28,12 @@ public class MedicalBuilding extends AbstractBaseEntity implements Serializable 
     }
 
     public MedicalBuilding(MedicalBuildingDto mBuilding) {
+        if (mBuilding == null)
+            return;
         this.setId(mBuilding.getId());
         setName(mBuilding.getName());
         setCode(mBuilding.getCode());
-        setMedicalCenter(mBuilding.getMedicalCenter());
+        setMedicalCenter(new MedicalCenter(mBuilding.getMedicalCenter()));
         setCreatedAt(mBuilding.getCreatedAt());
         setUpdatedAt(mBuilding.getUpdatedAt());
         this.setStatus(mBuilding.getStatus());
@@ -43,7 +45,9 @@ public class MedicalBuilding extends AbstractBaseEntity implements Serializable 
         mBuilding.setStatus(this.getStatus());
         mBuilding.setName(name);
         mBuilding.setCode(code);
-        mBuilding.setMedicalCenter(medicalCenter);
+        if (medicalCenter != null) {
+            mBuilding.setMedicalCenter(medicalCenter.toDto());
+        }
         return mBuilding;
     }
 

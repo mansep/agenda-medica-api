@@ -1,5 +1,6 @@
 package com.mansep.agenda.controller;
 
+import com.mansep.agenda.dto.auth.AuthChangePasswordDto;
 import com.mansep.agenda.dto.auth.AuthLoginDto;
 import com.mansep.agenda.dto.auth.AuthResponseDto;
 
@@ -47,7 +48,21 @@ public class AuthController {
     public ResponseEntity<AuthResponseDto> register(@RequestBody UserDto user) {
         try {
             return ResponseEntity.ok(authService.register(user));
-        } catch (BadRequestException e) {
+        } catch (ForbiddenException | BadRequestException e) {
+            LOGGER.error("Error al crear usuario", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Error al crear usuario", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Boolean> changePass(@RequestBody AuthChangePasswordDto changePassword) {
+        try {
+            authService.changePassword(changePassword);
+            return ResponseEntity.ok(true);
+        } catch (ForbiddenException | BadRequestException e) {
             LOGGER.error("Error al crear usuario", e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {

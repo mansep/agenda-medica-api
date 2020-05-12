@@ -7,7 +7,8 @@ import java.util.List;
 
 import com.mansep.agenda.dto.abstrct.AbstractBaseDto;
 import com.mansep.agenda.entity.MedicalAppointment;
-public class MedicalAppointmentDto extends AbstractBaseDto implements Serializable {
+
+public class MedicalAppointmentAvailabilityDto extends AbstractBaseDto implements Serializable {
     /**
      *
      */
@@ -16,10 +17,11 @@ public class MedicalAppointmentDto extends AbstractBaseDto implements Serializab
     private Date schedule;
     private MedicalOfficeDto medicalOffice;
     private UserDto userDoctor;
+    private boolean availability;
 
     @Override
     public String toString() {
-        return "MedicalAppointmentDto [id=" + this.getId() + ", schedule=" + schedule.toString() + "]";
+        return "MedicalAppointmentAvailabilityDto [id=" + this.getId() + ", scheduleFrom=" + schedule.toString() + "]";
     }
 
     public static List<MedicalAppointmentDto> toListDto(List<MedicalAppointment> mAppointments) {
@@ -42,8 +44,8 @@ public class MedicalAppointmentDto extends AbstractBaseDto implements Serializab
         return medicalOffice;
     }
 
-    public void setMedicalOffice(MedicalOfficeDto medicalOffice) {
-        this.medicalOffice = medicalOffice;
+    public void setMedicalOffice(MedicalOfficeDto meedicalOffice) {
+        this.medicalOffice = meedicalOffice;
     }
 
     public UserDto getUserDoctor() {
@@ -53,5 +55,14 @@ public class MedicalAppointmentDto extends AbstractBaseDto implements Serializab
     public void setUserDoctor(UserDto userDoctor) {
         this.userDoctor = userDoctor;
     }
+
+    public boolean isAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
+
 
 }

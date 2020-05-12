@@ -87,6 +87,18 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('DOCTOR')")
+    @PutMapping("/me")
+    public ResponseEntity<UserDto> updateUserMe(@RequestBody UserDto editUser) {
+        try {
+            User user = userService.updateMe(editUser);
+            return ResponseEntity.ok(user.toDto());
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar usuario", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto editUser) {

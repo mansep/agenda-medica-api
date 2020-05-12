@@ -25,20 +25,25 @@ public class MedicalAppointmentReserved extends AbstractBaseEntity implements Se
     }
 
     public MedicalAppointmentReserved(MedicalAppointmentReservedDto mAppointmentReserved) {
+        if (mAppointmentReserved == null)
+            return;
         this.setId(mAppointmentReserved.getId());
-        setUser(mAppointmentReserved.getUser());
+        setUser(new User(mAppointmentReserved.getUser()));
         setCreatedAt(mAppointmentReserved.getCreatedAt());
         setUpdatedAt(mAppointmentReserved.getUpdatedAt());
         this.setStatus(mAppointmentReserved.getStatus());
     }
 
-
     public MedicalAppointmentReservedDto toDto() {
         MedicalAppointmentReservedDto mAppointmentReserved = new MedicalAppointmentReservedDto();
         mAppointmentReserved.setId(this.getId());
         mAppointmentReserved.setStatus(this.getStatus());
-        mAppointmentReserved.setUser(user);
-        mAppointmentReserved.setMedicalAppointment(medicalAppointment);
+        if (user != null) {
+            mAppointmentReserved.setUser(user.toDto());
+        }
+        if (medicalAppointment != null) {
+            mAppointmentReserved.setMedicalAppointment(medicalAppointment.toDto());
+        }
         return mAppointmentReserved;
     }
 
@@ -57,6 +62,5 @@ public class MedicalAppointmentReserved extends AbstractBaseEntity implements Se
     public void setUser(User user) {
         this.user = user;
     }
-
 
 }

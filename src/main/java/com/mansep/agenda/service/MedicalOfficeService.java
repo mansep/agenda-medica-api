@@ -17,6 +17,8 @@ public interface MedicalOfficeService {
 
     void delete(Long id) throws NotFoundException;
 
+    List<MedicalOffice> findByIdMedicalBuilding(Long id) throws NotFoundException;
+
     MedicalOffice findOne(String code) throws NotFoundException;
 
     MedicalOffice findById(Long id) throws NotFoundException;
