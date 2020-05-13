@@ -10,17 +10,17 @@ import com.mansep.agenda.exception.NotFoundException;
 
 public interface MedicalAppointmentReservedService {
 
-    MedicalAppointmentReserved create(MedicalAppointmentReservedDto mAppointmentReserved)
-            throws BadRequestException, Exception;
+        MedicalAppointmentReserved create(MedicalAppointmentReservedDto mAppointmentReserved)
+                        throws BadRequestException, NumberFormatException, NotFoundException;
 
-    MedicalAppointmentReserved update(Long id, MedicalAppointmentReservedDto mAppointmentReserved)
-            throws NotFoundException;
+        MedicalAppointmentReserved update(Long id, MedicalAppointmentReservedDto mAppointmentReserved)
+                        throws NotFoundException;
 
-    List<MedicalAppointmentReserved> findAll();
+        List<MedicalAppointmentReserved> findAll();
 
-    void delete(Long id) throws NotFoundException;
+        void delete(Long id) throws NotFoundException;
 
-    MedicalAppointmentReserved findOne(MedicalAppointment mMedicalAppointment) throws NotFoundException;
+        MedicalAppointmentReserved findOne(MedicalAppointment mMedicalAppointment) throws NotFoundException;
 
-    MedicalAppointmentReserved findById(Long id) throws NotFoundException;
+        MedicalAppointmentReserved findById(Long id) throws NotFoundException;
 }

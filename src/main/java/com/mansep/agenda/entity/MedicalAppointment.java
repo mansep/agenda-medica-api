@@ -21,6 +21,8 @@ public class MedicalAppointment extends AbstractBaseEntity implements Serializab
     @ManyToOne(fetch = FetchType.LAZY)
     private MedicalOffice medicalOffice;
     @ManyToOne(fetch = FetchType.LAZY)
+    private MedicalSpeciality medicalSpeciality;
+    @ManyToOne(fetch = FetchType.LAZY)
     private User userDoctor;
 
     public MedicalAppointment() {
@@ -33,6 +35,7 @@ public class MedicalAppointment extends AbstractBaseEntity implements Serializab
         setSchedule(mAppointment.getSchedule());
         setUserDoctor(new User(mAppointment.getUserDoctor()));
         setMedicalOffice(new MedicalOffice(mAppointment.getMedicalOffice()));
+        setMedicalSpeciality(new MedicalSpeciality(mAppointment.getMedicalSpeciality()));
         setCreatedAt(mAppointment.getCreatedAt());
         setUpdatedAt(mAppointment.getUpdatedAt());
         this.setStatus(mAppointment.getStatus());
@@ -48,6 +51,9 @@ public class MedicalAppointment extends AbstractBaseEntity implements Serializab
         }
         if (medicalOffice != null) {
             mAppointment.setMedicalOffice(medicalOffice.toDto());
+        }
+        if (medicalSpeciality != null) {
+            mAppointment.setMedicalSpeciality(medicalSpeciality.toDto());
         }
         return mAppointment;
     }
@@ -74,6 +80,14 @@ public class MedicalAppointment extends AbstractBaseEntity implements Serializab
 
     public void setUserDoctor(User userDoctor) {
         this.userDoctor = userDoctor;
+    }
+
+    public MedicalSpeciality getMedicalSpeciality() {
+        return medicalSpeciality;
+    }
+
+    public void setMedicalSpeciality(MedicalSpeciality medicalSpeciality) {
+        this.medicalSpeciality = medicalSpeciality;
     }
 
 }

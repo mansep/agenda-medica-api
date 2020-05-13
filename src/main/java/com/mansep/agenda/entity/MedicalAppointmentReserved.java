@@ -28,7 +28,12 @@ public class MedicalAppointmentReserved extends AbstractBaseEntity implements Se
         if (mAppointmentReserved == null)
             return;
         this.setId(mAppointmentReserved.getId());
-        setUser(new User(mAppointmentReserved.getUser()));
+        if (mAppointmentReserved.getUser() != null) {
+            setUser(new User(mAppointmentReserved.getUser()));
+        }
+        if (mAppointmentReserved.getMedicalAppointment() != null) {
+            setMedicalAppointment(new MedicalAppointment(mAppointmentReserved.getMedicalAppointment()));
+        }
         setCreatedAt(mAppointmentReserved.getCreatedAt());
         setUpdatedAt(mAppointmentReserved.getUpdatedAt());
         this.setStatus(mAppointmentReserved.getStatus());

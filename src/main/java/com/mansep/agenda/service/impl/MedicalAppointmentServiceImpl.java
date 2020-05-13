@@ -9,11 +9,13 @@ import java.util.Date;
 import com.mansep.agenda.dto.MedicalAppointmentAvailabilityDto;
 import com.mansep.agenda.dto.MedicalAppointmentDto;
 import com.mansep.agenda.entity.MedicalAppointment;
+import com.mansep.agenda.entity.MedicalAppointmentView;
 import com.mansep.agenda.entity.MedicalOffice;
 import com.mansep.agenda.entity.enums.Status;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.repository.MedicalAppointmentRepository;
+import com.mansep.agenda.repository.MedicalAppointmentViewRepository;
 import com.mansep.agenda.service.MedicalAppointmentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 
 	@Autowired
 	private MedicalAppointmentRepository mAppointmentRepository;
+
+	@Autowired
+	private MedicalAppointmentViewRepository mAppointmentViewRepository;
 
 	public List<MedicalAppointment> findAll() {
 		List<MedicalAppointment> list = new ArrayList<>();
@@ -39,6 +44,11 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 	@Override
 	public MedicalAppointment findById(Long id) {
 		return mAppointmentRepository.findById(id).get();
+	}
+
+	@Override
+	public List<MedicalAppointmentView> findByMedicalSpecialityIdAndMedicalCenterId(Long specialityId, Long centerId) {
+		return mAppointmentViewRepository.findBySpecialityIdAndCenterId(specialityId, centerId);
 	}
 
 	@Override

@@ -7,13 +7,18 @@ import java.util.Date;
 import com.mansep.agenda.dto.MedicalAppointmentReservedDto;
 import com.mansep.agenda.entity.MedicalAppointment;
 import com.mansep.agenda.entity.MedicalAppointmentReserved;
+import com.mansep.agenda.entity.User;
 import com.mansep.agenda.entity.enums.Status;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.repository.MedicalAppointmentReservedRepository;
 import com.mansep.agenda.service.MedicalAppointmentReservedService;
+import com.mansep.agenda.service.MedicalAppointmentService;
+import com.mansep.agenda.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service(value = "medicalAppointmentReservedService")
@@ -21,6 +26,12 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 
 	@Autowired
 	private MedicalAppointmentReservedRepository mAppointmentReservedRepository;
+
+	@Autowired
+	private MedicalAppointmentService mAppointmenService;
+
+	@Autowired
+	private UserService userService;
 
 	public List<MedicalAppointmentReserved> findAll() {
 		List<MedicalAppointmentReserved> list = new ArrayList<>();
@@ -53,16 +64,23 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 
 	@Override
 	public MedicalAppointmentReserved create(MedicalAppointmentReservedDto mAppointmentReserved)
-			throws BadRequestException {
+			throws BadRequestException, NumberFormatException, NotFoundException {
 		MedicalAppointmentReserved newMedicalAppointmentReserved = new MedicalAppointmentReserved(mAppointmentReserved);
 
 		// Revisar duplicidad
-		MedicalAppointmentReserved ma = this
-				.findOne(new MedicalAppointment(mAppointmentReserved.getMedicalAppointment()));
+		MedicalAppointment ma = this.mAppointmenService.findById(mAppointmentReserved.getMedicalAppointment().getId());
 		if (ma == null) {
 			throw new BadRequestException("Hora médica no existe");
 		}
-		if (ma.getUser() != null) {
+
+		if (mAppointmentReserved.getUser() == null) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			User user = this.userService.findById(Long.parseLong(auth.getPrincipal().toString()));
+			mAppointmentReserved.setUser(user.toDto());
+		}
+
+		MedicalAppointmentReserved mar = this.mAppointmentReservedRepository.findByMedicalAppointment(ma);
+		if (mar != null) {
 			throw new BadRequestException("Hora médica no está disponible");
 		}
 

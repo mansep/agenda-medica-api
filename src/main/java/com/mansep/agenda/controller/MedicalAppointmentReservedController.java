@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mansep.agenda.dto.MedicalAppointmentReservedDto;
 import com.mansep.agenda.entity.MedicalAppointmentReserved;
+import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.service.MedicalAppointmentReservedService;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/medical-appointment-reserved")
@@ -60,8 +62,12 @@ public class MedicalAppointmentReservedController {
     public ResponseEntity<MedicalAppointmentReservedDto> updateMedicalAppointmentReserved(@PathVariable Long id,
             @RequestBody MedicalAppointmentReservedDto mAppointmentReserved) {
         try {
-            MedicalAppointmentReserved newMedicalAppointmentReserved = mAppointmentReservedService.update(id, mAppointmentReserved);
+            MedicalAppointmentReserved newMedicalAppointmentReserved = mAppointmentReservedService.update(id,
+                    mAppointmentReserved);
             return ResponseEntity.ok(newMedicalAppointmentReserved.toDto());
+        } catch (NotFoundException e) {
+            LOGGER.error("Error al editar hora médica", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.error("Error al editar hora médica", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -74,6 +80,9 @@ public class MedicalAppointmentReservedController {
         try {
             mAppointmentReservedService.delete(id);
             return ResponseEntity.ok(true);
+        } catch (NotFoundException e) {
+            LOGGER.error("Error al eliminar hora médica", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.error("Error al eliminar hora médica", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -82,10 +91,18 @@ public class MedicalAppointmentReservedController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
     @PostMapping("/")
-    public ResponseEntity<MedicalAppointmentReservedDto> createMedicalAppointmentReserved(@RequestBody MedicalAppointmentReservedDto mAppointmentReserved) {
+    public ResponseEntity<MedicalAppointmentReservedDto> createMedicalAppointmentReserved(
+            @RequestBody MedicalAppointmentReservedDto mAppointmentReserved) {
         try {
-            MedicalAppointmentReserved newMedicalAppointmentReserved = mAppointmentReservedService.create(mAppointmentReserved);
+            MedicalAppointmentReserved newMedicalAppointmentReserved = mAppointmentReservedService
+                    .create(mAppointmentReserved);
             return ResponseEntity.ok(newMedicalAppointmentReserved.toDto());
+        } catch (NotFoundException e) {
+            LOGGER.error("Error al editar hora médica", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (BadRequestException e) {
+            LOGGER.error("Error al crear hora médica", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {
             LOGGER.error("Error al crear hora médica", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

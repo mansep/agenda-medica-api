@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.mansep.agenda.dto.abstrct.AbstractBaseDto;
 import com.mansep.agenda.entity.MedicalAppointment;
+
 public class MedicalAppointmentDto extends AbstractBaseDto implements Serializable {
     /**
      *
@@ -15,6 +16,7 @@ public class MedicalAppointmentDto extends AbstractBaseDto implements Serializab
 
     private Date schedule;
     private MedicalOfficeDto medicalOffice;
+    private MedicalSpecialityDto medicalSpeciality;
     private UserDto userDoctor;
 
     @Override
@@ -52,6 +54,14 @@ public class MedicalAppointmentDto extends AbstractBaseDto implements Serializab
 
     public void setUserDoctor(UserDto userDoctor) {
         this.userDoctor = userDoctor;
+    }
+
+    public MedicalSpecialityDto getMedicalSpeciality() {
+        return medicalSpeciality;
+    }
+
+    public void setMedicalSpeciality(MedicalSpecialityDto medicalSpeciality) {
+        this.medicalSpeciality = medicalSpeciality;
     }
 
 }

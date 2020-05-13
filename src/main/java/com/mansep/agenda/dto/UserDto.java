@@ -94,14 +94,14 @@ public class UserDto extends AbstractBaseDto implements Serializable {
     }
 
     public String getRut() {
-        if (rut.equals(null)) {
+        if (rut == null) {
             return rut;
         }
         return rut.replace("-", "").replace(".", "").toUpperCase().trim();
     }
 
     public void setRut(String rut) {
-        if (!rut.equals(null)) {
+        if (rut != null) {
             rut = rut.replace("-", "").replace(".", "").toUpperCase().trim();
         }
         this.rut = rut;

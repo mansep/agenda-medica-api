@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.mansep.agenda.dto.MedicalAppointmentAvailabilityDto;
 import com.mansep.agenda.dto.MedicalAppointmentDto;
+import com.mansep.agenda.dto.MedicalAppointmentViewDto;
 import com.mansep.agenda.entity.MedicalAppointment;
+import com.mansep.agenda.entity.MedicalAppointmentView;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.service.MedicalAppointmentService;
@@ -39,6 +41,19 @@ public class MedicalAppointmentController {
         try {
             List<MedicalAppointment> mAppointments = mAppointmentService.findAll();
             return ResponseEntity.ok(MedicalAppointmentDto.toListDto(mAppointments));
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar hora médica", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/availability/{specialityId}/{centerId}")
+    public ResponseEntity<List<MedicalAppointmentViewDto>> getAllMedicalAppointmentBySpecialityIdAndCenterId(
+            @PathVariable Long specialityId, @PathVariable Long centerId) {
+        try {
+            List<MedicalAppointmentView> mAppointments = mAppointmentService
+                    .findByMedicalSpecialityIdAndMedicalCenterId(specialityId, centerId);
+            return ResponseEntity.ok(MedicalAppointmentViewDto.toListDto(mAppointments));
         } catch (Exception e) {
             LOGGER.error("Error al cargar hora médica", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
