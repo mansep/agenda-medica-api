@@ -127,4 +127,9 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 		}
 		return created;
 	}
+
+	@Override
+	public MedicalAppointmentView findInViewById(Long medicalAppointmentId) {
+		return this.mAppointmentViewRepository.findInViewById(medicalAppointmentId);
+	}
 }

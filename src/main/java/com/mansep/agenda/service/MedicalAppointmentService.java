@@ -31,4 +31,6 @@ public interface MedicalAppointmentService {
     MedicalAppointment findById(Long id) throws NotFoundException;
 
     List<MedicalAppointmentView> findByMedicalSpecialityIdAndMedicalCenterId(Long specialityID, Long centerId);
+
+    MedicalAppointmentView findInViewById(Long medicalAppointmentId);
 }
