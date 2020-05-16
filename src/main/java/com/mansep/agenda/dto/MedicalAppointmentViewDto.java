@@ -14,6 +14,7 @@ public class MedicalAppointmentViewDto implements Serializable {
 
 
     private Long id;
+    private Long reservedId;
     private String doctorRut;
     private Long doctorId;
     private String doctorName;
@@ -223,6 +224,14 @@ public class MedicalAppointmentViewDto implements Serializable {
 
     public void setSpecialityName(String specialityName) {
         this.specialityName = specialityName;
+    }
+
+    public Long getReservedId() {
+        return reservedId;
+    }
+
+    public void setReservedId(Long reservedId) {
+        this.reservedId = reservedId;
     }
 
 }

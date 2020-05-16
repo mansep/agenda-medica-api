@@ -20,6 +20,8 @@ public class MedicalAppointmentView implements Serializable {
     @Column(name = "ID")
     private Long id;
     @Column(name = "DOCTOR_RUT")
+    private Long reservedId;
+    @Column(name = "RESERVED_ID")
     private String doctorRut;
     @Column(name = "DOCTOR_ID")
     private Long doctorId;
@@ -69,6 +71,7 @@ public class MedicalAppointmentView implements Serializable {
         if (mAppointmentView == null)
             return;
         setId(mAppointmentView.getId());
+        setReservedId(mAppointmentView.getReservedId());
         setDoctorId(mAppointmentView.getDoctorId());
         setDoctorName(mAppointmentView.getDoctorName());
         setDoctorLastName(mAppointmentView.getDoctorLastName());
@@ -95,6 +98,7 @@ public class MedicalAppointmentView implements Serializable {
     public MedicalAppointmentViewDto toDto() {
         MedicalAppointmentViewDto mAppointment = new MedicalAppointmentViewDto();
         mAppointment.setId(this.getId());
+        mAppointment.setReservedId(this.getReservedId());
         mAppointment.setDoctorId(this.getDoctorId());
         mAppointment.setDoctorName(this.getDoctorName());
         mAppointment.setDoctorLastName(this.getDoctorLastName());
@@ -293,5 +297,13 @@ public class MedicalAppointmentView implements Serializable {
 
     public void setSpecialityName(String specialityName) {
         this.specialityName = specialityName;
+    }
+
+    public Long getReservedId() {
+        return reservedId;
+    }
+
+    public void setReservedId(Long reservedId) {
+        this.reservedId = reservedId;
     }
 }
