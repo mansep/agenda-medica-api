@@ -15,6 +15,7 @@ public class MedicalAppointmentViewDto implements Serializable {
 
     private Long id;
     private Long reservedId;
+    private String reservedStatus;
     private String doctorRut;
     private Long doctorId;
     private String doctorName;
@@ -36,6 +37,11 @@ public class MedicalAppointmentViewDto implements Serializable {
     private String centerAddress;
     private String centerEmail;
     private String centerPhone;
+    private Long patientId;
+    private String patientRut;
+    private String patientName;
+    private String patientLastName;
+    private String patientEmail;
     
     @Override
     public String toString() {
@@ -232,6 +238,54 @@ public class MedicalAppointmentViewDto implements Serializable {
 
     public void setReservedId(Long reservedId) {
         this.reservedId = reservedId;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getPatientRut() {
+        return patientRut;
+    }
+
+    public void setPatientRut(String patientRut) {
+        this.patientRut = patientRut;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public String getPatientLastName() {
+        return patientLastName;
+    }
+
+    public void setPatientLastName(String patientLastName) {
+        this.patientLastName = patientLastName;
+    }
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
+    }
+
+    public String getReservedStatus() {
+        return reservedStatus;
+    }
+
+    public void setReservedStatus(String reservedStatus) {
+        this.reservedStatus = reservedStatus;
     }
 
 }

@@ -33,4 +33,6 @@ public interface MedicalAppointmentService {
     List<MedicalAppointmentView> findByMedicalSpecialityIdAndMedicalCenterId(Long specialityID, Long centerId);
 
     MedicalAppointmentView findInViewById(Long medicalAppointmentId);
+
+    MedicalAppointmentView findInViewByReservedId(Long medicalAppointmentReservedId);
 }

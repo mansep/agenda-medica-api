@@ -7,19 +7,24 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.mansep.agenda.dto.MedicalAppointmentReservedDto;
+import com.mansep.agenda.dto.StatusDto;
 import com.mansep.agenda.entity.Configuration;
 import com.mansep.agenda.entity.MedicalAppointment;
 import com.mansep.agenda.entity.MedicalAppointmentReserved;
 import com.mansep.agenda.entity.MedicalAppointmentView;
+import com.mansep.agenda.entity.MedicalCenter;
 import com.mansep.agenda.entity.User;
+import com.mansep.agenda.entity.enums.Role;
 import com.mansep.agenda.entity.enums.Status;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.repository.MedicalAppointmentReservedRepository;
+import com.mansep.agenda.repository.MedicalAppointmentViewRepository;
 import com.mansep.agenda.service.ConfigurationService;
 import com.mansep.agenda.service.EmailService;
 import com.mansep.agenda.service.MedicalAppointmentReservedService;
 import com.mansep.agenda.service.MedicalAppointmentService;
+import com.mansep.agenda.service.MedicalCenterService;
 import com.mansep.agenda.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +39,13 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 	private MedicalAppointmentReservedRepository mAppointmentReservedRepository;
 
 	@Autowired
+	private MedicalAppointmentViewRepository mAppointmentViewRepository;
+
+	@Autowired
 	private MedicalAppointmentService mAppointmenService;
+
+	@Autowired
+	private MedicalCenterService mCenterService;
 
 	@Autowired
 	private UserService userService;
@@ -96,7 +107,9 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 
 		MedicalAppointmentReserved mar = this.mAppointmentReservedRepository.findByMedicalAppointment(ma);
 		if (mar != null) {
-			throw new BadRequestException("Hora médica no está disponible");
+			if (mar.getStatus() != Status.CANCELED && mar.getStatus() != Status.DELETED) {
+				throw new BadRequestException("Hora médica no está disponible");
+			}
 		}
 
 		MedicalAppointmentReserved mApp = mAppointmentReservedRepository.save(newMedicalAppointmentReserved);
@@ -123,8 +136,7 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 			String strDate = dateFormat.format(mAppView.getSchedule());
 
 			String mensaje = "<p>¡Hola " + user.getName() + " " + user.getLastName() + "!,</p>"
-					+ "<p>Se ha realizado la reserva médica con éxito.</p>" 
-					+ "<p>Detallamos la reserva realizada:</p>"
+					+ "<p>Se ha realizado la reserva médica con éxito.</p>" + "<p>Detallamos la reserva realizada:</p>"
 					+ "<br/><table><tr><td><b>Horario</b></td><td>" + strDate
 					+ "</td></tr><tr><td><b>Doctor(a)</b></td><td>" + mAppView.getDoctorName() + " "
 					+ mAppView.getDoctorLastName() + "</td></tr><tr><td><b>Especialidad</b></td><td>"
@@ -150,5 +162,75 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	private boolean sendEmailChangeStatus(MedicalAppointmentReserved mAppReserved, MedicalAppointmentView mAppView,
+			Status status) {
+		try {
+			User user = userService.findById(mAppReserved.getUser().getId());
+
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			String strDate = dateFormat.format(mAppView.getSchedule());
+
+			String mensaje = "";
+			String asunto = "";
+
+			if (status.equals(Status.CANCELED)) {
+				MedicalCenter mCenter = this.mCenterService.findById(mAppView.getCenterId());
+				mensaje = "<p>¡Hola " + user.getName() + " " + user.getLastName() + "!,</p>"
+						+ "<p>Su reserva médica ha sido cancelada.</p>"
+						+ "<p>Si tiene dudas nos puede contactar al <a href='tel:" + mCenter.getPhone() + "'>"
+						+ mCenter.getPhone() + "</a> o al correo " + mCenter.getEmail() + "</p>"
+						+ "<p>Muchas gracias.</p>";
+
+				asunto = "Cancelación hora médica";
+			} else if (status.equals(Status.CONFIRMED)) {
+				mensaje = "<p>¡Hola " + user.getName() + " " + user.getLastName() + "!,</p>"
+						+ "<p>Se ha confirmado la asistencia a su atención médica con éxito.</p>"
+						+ "<p>Detallamos la reserva realizada:</p>" + "<br/><table><tr><td><b>Horario</b></td><td>"
+						+ strDate + "</td></tr><tr><td><b>Doctor(a)</b></td><td>" + mAppView.getDoctorName() + " "
+						+ mAppView.getDoctorLastName() + "</td></tr><tr><td><b>Especialidad</b></td><td>"
+						+ mAppView.getSpecialityName() + "</td></tr><tr><td><b>Centro Médico</b></td><td>"
+						+ mAppView.getCenterName() + "</td></tr><tr><td><b>Dirección</b></td><td>"
+						+ mAppView.getCenterAddress() + "</td></tr><tr><td><b>Edificio</b></td><td>"
+						+ mAppView.getBuildingName() + "</td></tr><tr><td><b>Piso</b></td><td>"
+						+ mAppView.getOfficeFloor() + "</td></tr><tr><td><b>Oficina</b></td><td>"
+						+ mAppView.getCenterName() + "</td></tr></table><br/><p>¡Te esperamos!.</p>";
+				asunto = "Confirmación de asistencia";
+			} else {
+				return false;
+			}
+
+			return this.emailService.sendEmail(user.getEmail(), asunto, mensaje);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public List<MedicalAppointmentView> findPatient() throws NotFoundException {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Long userId = Long.parseLong(auth.getPrincipal().toString());
+		User user = this.userService.findById(userId);
+		if (user.getRole().equals(Role.DOCTOR)) {
+			return this.mAppointmentViewRepository.findInViewByDoctorId(userId);
+		} else {
+			return this.mAppointmentViewRepository.findInViewByPatientId(userId);
+		}
+	}
+
+	@Override
+	public MedicalAppointmentReserved updateStatus(Long id, StatusDto status) throws NotFoundException {
+		MedicalAppointmentReserved reserva = this.findById(id);
+		MedicalAppointmentView mAppView = this.mAppointmenService.findInViewByReservedId(id);
+		if (mAppView == null) {
+			throw new NotFoundException("Hora médica no existe");
+		}
+
+		reserva.setStatus(status.getStatus());
+		MedicalAppointmentReserved mApp = this.mAppointmentReservedRepository.save(reserva);
+		this.sendEmailChangeStatus(mApp, mAppView, status.getStatus());
+		return mApp;
 	}
 }

@@ -19,9 +19,11 @@ public class MedicalAppointmentView implements Serializable {
     @Id
     @Column(name = "ID")
     private Long id;
-    @Column(name = "DOCTOR_RUT")
-    private Long reservedId;
     @Column(name = "RESERVED_ID")
+    private Long reservedId;
+    @Column(name = "RESERVED_STATUS")
+    private String reservedStatus;
+    @Column(name = "DOCTOR_RUT")
     private String doctorRut;
     @Column(name = "DOCTOR_ID")
     private Long doctorId;
@@ -63,6 +65,16 @@ public class MedicalAppointmentView implements Serializable {
     private String centerEmail;
     @Column(name = "CENTER_PHONE")
     private String centerPhone;
+    @Column(name = "PATIENT_ID")
+    private Long patientId;
+    @Column(name = "PATIENT_RUT")
+    private String patientRut;
+    @Column(name = "PATIENT_NAME")
+    private String patientName;
+    @Column(name = "PATIENT_LAST_NAME")
+    private String patientLastName;
+    @Column(name = "PATIENT_EMAIL")
+    private String patientEmail;
 
     public MedicalAppointmentView() {
     }
@@ -72,6 +84,7 @@ public class MedicalAppointmentView implements Serializable {
             return;
         setId(mAppointmentView.getId());
         setReservedId(mAppointmentView.getReservedId());
+        setReservedStatus(mAppointmentView.getReservedStatus());
         setDoctorId(mAppointmentView.getDoctorId());
         setDoctorName(mAppointmentView.getDoctorName());
         setDoctorLastName(mAppointmentView.getDoctorLastName());
@@ -93,12 +106,18 @@ public class MedicalAppointmentView implements Serializable {
         setCenterAddress(mAppointmentView.getCenterAddress());
         setCenterPhone(mAppointmentView.getCenterPhone());
         setCenterEmail(mAppointmentView.getCenterEmail());
+        setPatientId(mAppointmentView.getPatientId());
+        setPatientName(mAppointmentView.getPatientName());
+        setPatientLastName(mAppointmentView.getPatientLastName());
+        setPatientRut(mAppointmentView.getPatientRut());
+
     }
 
     public MedicalAppointmentViewDto toDto() {
         MedicalAppointmentViewDto mAppointment = new MedicalAppointmentViewDto();
         mAppointment.setId(this.getId());
         mAppointment.setReservedId(this.getReservedId());
+        mAppointment.setReservedStatus(this.getReservedStatus());
         mAppointment.setDoctorId(this.getDoctorId());
         mAppointment.setDoctorName(this.getDoctorName());
         mAppointment.setDoctorLastName(this.getDoctorLastName());
@@ -120,6 +139,10 @@ public class MedicalAppointmentView implements Serializable {
         mAppointment.setCenterAddress(this.getCenterAddress());
         mAppointment.setCenterPhone(this.getCenterPhone());
         mAppointment.setCenterEmail(this.getCenterEmail());
+        mAppointment.setPatientId(this.getPatientId());
+        mAppointment.setPatientName(this.getPatientName());
+        mAppointment.setPatientLastName(this.getPatientLastName());
+        mAppointment.setPatientRut(this.getPatientRut());
         return mAppointment;
     }
 
@@ -305,5 +328,53 @@ public class MedicalAppointmentView implements Serializable {
 
     public void setReservedId(Long reservedId) {
         this.reservedId = reservedId;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getPatientRut() {
+        return patientRut;
+    }
+
+    public void setPatientRut(String patientRut) {
+        this.patientRut = patientRut;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public String getPatientLastName() {
+        return patientLastName;
+    }
+
+    public void setPatientLastName(String patientLastName) {
+        this.patientLastName = patientLastName;
+    }
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
+    }
+
+    public String getReservedStatus() {
+        return reservedStatus;
+    }
+
+    public void setReservedStatus(String reservedStatus) {
+        this.reservedStatus = reservedStatus;
     }
 }

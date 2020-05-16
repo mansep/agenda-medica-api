@@ -1,5 +1,5 @@
 package com.mansep.agenda.entity.enums;
 
 public enum Status {
-    ACTIVE, DELETED,
+    ACTIVE, DELETED, CANCELED, CONFIRMED,
 }

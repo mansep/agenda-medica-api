@@ -3,7 +3,10 @@ package com.mansep.agenda.controller;
 import java.util.List;
 
 import com.mansep.agenda.dto.MedicalAppointmentReservedDto;
+import com.mansep.agenda.dto.MedicalAppointmentViewDto;
+import com.mansep.agenda.dto.StatusDto;
 import com.mansep.agenda.entity.MedicalAppointmentReserved;
+import com.mansep.agenda.entity.MedicalAppointmentView;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.service.MedicalAppointmentReservedService;
@@ -39,7 +42,21 @@ public class MedicalAppointmentReservedController {
             List<MedicalAppointmentReserved> mAppointmentReserveds = mAppointmentReservedService.findAll();
             return ResponseEntity.ok(MedicalAppointmentReservedDto.toListDto(mAppointmentReserveds));
         } catch (Exception e) {
-            LOGGER.error("Error al cargar hora médica", e);
+            LOGGER.error("Error al cargar reserva", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/me/")
+    public ResponseEntity<List<MedicalAppointmentViewDto>> getAllMedicalAppointmentReservedByUser() {
+        try {
+            List<MedicalAppointmentView> mAppointmentReserveds = mAppointmentReservedService.findPatient();
+            return ResponseEntity.ok(MedicalAppointmentViewDto.toListDto(mAppointmentReserveds));
+        } catch (NotFoundException e) {
+            LOGGER.error("Error al cargar reserva", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar reserva", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -50,9 +67,26 @@ public class MedicalAppointmentReservedController {
             MedicalAppointmentReserved mAppointmentReserved = mAppointmentReservedService.findById(id);
             return ResponseEntity.ok(mAppointmentReserved.toDto());
         } catch (NotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            LOGGER.error("Error al editar reserva", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("Error al cargar hora médica", e);
+            LOGGER.error("Error al cargar reserva", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<MedicalAppointmentReservedDto> updateMedicalAppointmentReservedStatus(@PathVariable Long id,
+            @RequestBody StatusDto status) {
+        try {
+            MedicalAppointmentReserved newMedicalAppointmentReserved = mAppointmentReservedService.updateStatus(id,
+                    status);
+            return ResponseEntity.ok(newMedicalAppointmentReserved.toDto());
+        } catch (NotFoundException e) {
+            LOGGER.error("Error al editar reserva", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Error al editar reserva", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -66,10 +100,10 @@ public class MedicalAppointmentReservedController {
                     mAppointmentReserved);
             return ResponseEntity.ok(newMedicalAppointmentReserved.toDto());
         } catch (NotFoundException e) {
-            LOGGER.error("Error al editar hora médica", e);
+            LOGGER.error("Error al editar reserva", e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("Error al editar hora médica", e);
+            LOGGER.error("Error al editar reserva", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -81,10 +115,10 @@ public class MedicalAppointmentReservedController {
             mAppointmentReservedService.delete(id);
             return ResponseEntity.ok(true);
         } catch (NotFoundException e) {
-            LOGGER.error("Error al eliminar hora médica", e);
+            LOGGER.error("Error al eliminar reserva", e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("Error al eliminar hora médica", e);
+            LOGGER.error("Error al eliminar reserva", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -98,13 +132,13 @@ public class MedicalAppointmentReservedController {
                     .create(mAppointmentReserved);
             return ResponseEntity.ok(newMedicalAppointmentReserved.toDto());
         } catch (NotFoundException e) {
-            LOGGER.error("Error al editar hora médica", e);
+            LOGGER.error("Error al editar reserva", e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (BadRequestException e) {
-            LOGGER.error("Error al crear hora médica", e);
+            LOGGER.error("Error al crear reserva", e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("Error al crear hora médica", e);
+            LOGGER.error("Error al crear reserva", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
