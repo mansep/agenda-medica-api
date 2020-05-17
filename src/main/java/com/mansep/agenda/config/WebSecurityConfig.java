@@ -45,8 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().addFilterBefore(new CorsFilterConfig(), ChannelProcessingFilter.class)
                 .addFilterAfter(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api-docs", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/web/**", "/api-docs", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/**")
+                .permitAll().anyRequest().authenticated();
     }
 
     @Bean

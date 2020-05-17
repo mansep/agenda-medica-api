@@ -19,15 +19,19 @@ public class MedicalSpeciality extends AbstractBaseEntity implements Serializabl
     private String name;
     @Column(length = 10, unique = true, nullable = false)
     private String code;
+    @Column(nullable = false)
+    private Long price;
 
     public MedicalSpeciality() {
     }
 
     public MedicalSpeciality(MedicalSpecialityDto mSpeciality) {
-        if (mSpeciality == null) return;
+        if (mSpeciality == null)
+            return;
         this.setId(mSpeciality.getId());
         setName(mSpeciality.getName());
         setCode(mSpeciality.getCode());
+        setPrice(mSpeciality.getPrice());
         setCreatedAt(mSpeciality.getCreatedAt());
         setUpdatedAt(mSpeciality.getUpdatedAt());
         this.setStatus(mSpeciality.getStatus());
@@ -39,6 +43,7 @@ public class MedicalSpeciality extends AbstractBaseEntity implements Serializabl
         mSpeciality.setCode(code);
         mSpeciality.setId(this.getId());
         mSpeciality.setStatus(this.getStatus());
+        mSpeciality.setPrice(this.getPrice());
         return mSpeciality;
     }
 
@@ -56,6 +61,14 @@ public class MedicalSpeciality extends AbstractBaseEntity implements Serializabl
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
 }

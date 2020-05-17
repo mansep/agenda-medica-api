@@ -20,6 +20,7 @@ public class MedicalAppointmentReserved extends AbstractBaseEntity implements Se
     private MedicalAppointment medicalAppointment;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+    private Long price;
 
     public MedicalAppointmentReserved() {
     }
@@ -36,6 +37,7 @@ public class MedicalAppointmentReserved extends AbstractBaseEntity implements Se
         }
         setCreatedAt(mAppointmentReserved.getCreatedAt());
         setUpdatedAt(mAppointmentReserved.getUpdatedAt());
+        setPrice(mAppointmentReserved.getPrice());
         this.setStatus(mAppointmentReserved.getStatus());
     }
 
@@ -49,6 +51,7 @@ public class MedicalAppointmentReserved extends AbstractBaseEntity implements Se
         if (medicalAppointment != null) {
             mAppointmentReserved.setMedicalAppointment(medicalAppointment.toDto());
         }
+        mAppointmentReserved.setPrice(this.getPrice());
         return mAppointmentReserved;
     }
 
@@ -66,6 +69,14 @@ public class MedicalAppointmentReserved extends AbstractBaseEntity implements Se
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
 }

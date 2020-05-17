@@ -24,6 +24,8 @@ public interface MedicalAppointmentReservedService {
 
         List<MedicalAppointmentView> findPatient() throws NotFoundException;
 
+        MedicalAppointmentView findPatientById(Long id) throws NotFoundException;
+
         void delete(Long id) throws NotFoundException;
 
         MedicalAppointmentReserved findOne(MedicalAppointment mMedicalAppointment) throws NotFoundException;

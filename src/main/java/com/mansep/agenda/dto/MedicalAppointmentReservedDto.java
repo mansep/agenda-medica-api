@@ -15,6 +15,7 @@ public class MedicalAppointmentReservedDto extends AbstractBaseDto implements Se
 
     private MedicalAppointmentDto medicalAppointment;
     private UserDto user;
+    private Long price;
 
     @Override
     public String toString() {
@@ -44,6 +45,14 @@ public class MedicalAppointmentReservedDto extends AbstractBaseDto implements Se
 
     public void setUser(UserDto user) {
         this.user = user;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
 }

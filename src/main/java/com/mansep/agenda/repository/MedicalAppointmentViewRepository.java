@@ -10,7 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface MedicalAppointmentViewRepository extends JpaRepository<MedicalAppointmentView, Long> {
 
-        String query = "SELECT ID, RESERVED_ID, RESERVED_STATUS, DOCTOR_RUT, DOCTOR_ID, DOCTOR_NAME, DOCTOR_LAST_NAME, SPECIALITY_ID, SPECIALITY_CODE, SPECIALITY_NAME, SCHEDULE, "
+        String query = "SELECT ID, RESERVED_ID, RESERVED_STATUS, RESERVED_PRICE, DOCTOR_RUT, DOCTOR_ID, DOCTOR_NAME, DOCTOR_LAST_NAME, "
+                        + "SPECIALITY_ID, SPECIALITY_CODE, SPECIALITY_NAME, SPECIALITY_PRICE, SCHEDULE, "
                         + " OFFICE_ID, OFFICE_CODE, OFFICE_NAME, OFFICE_FLOOR, BUILDING_ID, BUILDING_NAME, BUILDING_CODE, "
                         + " CENTER_ID, CENTER_NAME, CENTER_CODE, CENTER_ADDRESS, CENTER_EMAIL, CENTER_PHONE, "
                         + " PATIENT_ID, PATIENT_RUT, PATIENT_NAME, PATIENT_LAST_NAME, PATIENT_EMAIL"
@@ -53,4 +54,12 @@ public interface MedicalAppointmentViewRepository extends JpaRepository<MedicalA
         // 0", nativeQuery = true)
         // List<MedicalAppointmentView> findInViewHistoryByDoctorId(@Param("id") Long
         // userDoctorId);
+
+        @Query(value = query + " WHERE PATIENT_ID = :id AND RESERVED_ID =:reserve", nativeQuery = true)
+        MedicalAppointmentView findInViewByPatientIdAndId(@Param("id") Long userPatientId,
+                        @Param("reserve") Long reservedId);
+
+        @Query(value = query + " WHERE DOCTOR_ID = :id AND RESERVED_ID =:reserve", nativeQuery = true)
+        MedicalAppointmentView findInViewByDoctorIdAndId(@Param("id") Long userPatientId,
+                        @Param("reserve") Long reservedId);
 }

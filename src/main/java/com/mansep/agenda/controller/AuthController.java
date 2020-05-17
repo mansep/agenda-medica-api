@@ -2,11 +2,13 @@ package com.mansep.agenda.controller;
 
 import com.mansep.agenda.dto.auth.AuthChangePasswordDto;
 import com.mansep.agenda.dto.auth.AuthLoginDto;
+import com.mansep.agenda.dto.auth.AuthRecoveryDto;
 import com.mansep.agenda.dto.auth.AuthResponseDto;
 
 import com.mansep.agenda.dto.UserDto;
 import com.mansep.agenda.exception.BadRequestException;
 import com.mansep.agenda.exception.ForbiddenException;
+import com.mansep.agenda.exception.NotFoundException;
 import com.mansep.agenda.service.AuthService;
 
 import org.slf4j.Logger;
@@ -63,6 +65,23 @@ public class AuthController {
             authService.changePassword(changePassword);
             return ResponseEntity.ok(true);
         } catch (ForbiddenException | BadRequestException e) {
+            LOGGER.error("Error al crear usuario", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Error al crear usuario", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/recovery")
+    public ResponseEntity<AuthRecoveryDto> recovery(@RequestBody AuthRecoveryDto recovery) {
+        try {
+
+            return ResponseEntity.ok(authService.recovery(recovery));
+        } catch (NotFoundException e) {
+            LOGGER.error("Error al crear usuario", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (BadRequestException e) {
             LOGGER.error("Error al crear usuario", e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {

@@ -14,6 +14,7 @@ public class MedicalSpecialityDto extends AbstractBaseDto implements Serializabl
     private static final long serialVersionUID = 1L;
     private String name;
     private String code;
+    private Long price;
 
     @Override
     public String toString() {
@@ -42,5 +43,13 @@ public class MedicalSpecialityDto extends AbstractBaseDto implements Serializabl
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 }

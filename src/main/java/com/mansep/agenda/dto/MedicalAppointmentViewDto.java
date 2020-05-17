@@ -12,9 +12,9 @@ public class MedicalAppointmentViewDto implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-
     private Long id;
     private Long reservedId;
+    private Long reservedPrice;
     private String reservedStatus;
     private String doctorRut;
     private Long doctorId;
@@ -26,6 +26,7 @@ public class MedicalAppointmentViewDto implements Serializable {
     private String officeName;
     private String officeFloor;
     private Long specialityId;
+    private Long specialityPrice;
     private String specialityCode;
     private String specialityName;
     private Long buildingId;
@@ -42,7 +43,7 @@ public class MedicalAppointmentViewDto implements Serializable {
     private String patientName;
     private String patientLastName;
     private String patientEmail;
-    
+
     @Override
     public String toString() {
         return "MedicalAppointmentViewDto [id=" + this.getId() + ", schedule=" + schedule.toString() + "]";
@@ -286,6 +287,22 @@ public class MedicalAppointmentViewDto implements Serializable {
 
     public void setReservedStatus(String reservedStatus) {
         this.reservedStatus = reservedStatus;
+    }
+
+    public Long getReservedPrice() {
+        return reservedPrice;
+    }
+
+    public void setReservedPrice(Long reservedPrice) {
+        this.reservedPrice = reservedPrice;
+    }
+
+    public Long getSpecialityPrice() {
+        return specialityPrice;
+    }
+
+    public void setSpecialityPrice(Long specialityPrice) {
+        this.specialityPrice = specialityPrice;
     }
 
 }

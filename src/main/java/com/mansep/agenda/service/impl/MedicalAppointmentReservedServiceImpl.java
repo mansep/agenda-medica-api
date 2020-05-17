@@ -3,6 +3,10 @@ package com.mansep.agenda.service.impl;
 import java.util.List;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -96,12 +100,36 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 		if (mAppView == null) {
 			throw new BadRequestException("Hora médica no existe");
 		}
-
+		User user;
 		if (mAppointmentReserved.getUser() == null) {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			User user = this.userService.findById(Long.parseLong(auth.getPrincipal().toString()));
-			mAppointmentReserved.setUser(user.toDto());
+			user = this.userService.findById(Long.parseLong(auth.getPrincipal().toString()));
+		} else {
+			user = this.userService.findById(mAppointmentReserved.getUser().getId());
 		}
+		Long price = mAppView.getSpecialityPrice();
+
+		Date current = new Date();
+		Date birth = user.getDateBirth();
+
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+		Instant nowInstant = current.toInstant();
+		Instant birthInstant = birth.toInstant();
+		LocalDate nowLocalDate = nowInstant.atZone(defaultZoneId).toLocalDate();
+		LocalDate birthLocalDate = birthInstant.atZone(defaultZoneId).toLocalDate();
+		int year = Period.between(birthLocalDate, nowLocalDate).getYears();
+
+		if (year >= 50) {
+			// 80% de descuento para administradores
+			price = (long) (price * 0.2);
+		} else if (user.getRole().equals(Role.ADMIN)) {
+			// 50% de descuento para administradores
+			price = (long) (price * 0.5);
+		}
+
+		newMedicalAppointmentReserved.setPrice(price);
+		newMedicalAppointmentReserved.setUser(user);
+
 		MedicalAppointment ma = new MedicalAppointment();
 		ma.setId(mAppView.getId());
 
@@ -144,7 +172,9 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 					+ mAppView.getCenterName() + "</td></tr><tr><td><b>Dirección</b></td><td>"
 					+ mAppView.getCenterAddress() + "</td></tr><tr><td><b>Edificio</b></td><td>"
 					+ mAppView.getBuildingName() + "</td></tr><tr><td><b>Piso</b></td><td>" + mAppView.getOfficeFloor()
-					+ "</td></tr><tr><td><b>Oficina</b></td><td>" + mAppView.getCenterName() + "</td></tr></table><br/>"
+					+ "</td></tr><tr><td><b>Oficina</b></td><td>" + mAppView.getCenterName()
+					+ "</td></tr><tr><td><b>Precio bono</b></td><td>$ " + mAppView.getReservedPrice()
+					+ "</td></tr></table><br/>"
 					+ "<table><tr><td><table border='0' cellpadding='0' cellspacing='0' class='btn btn-primary'><tbody>"
 					+ "<tr><td align='left'><table border='0' cellpadding='0' cellspacing='0'><tbody><tr>"
 					+ "<td><a href='" + config.getUrl() + "/agenda/reservas/mis-reservas?confirmar="
@@ -178,7 +208,7 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 			if (status.equals(Status.CANCELED)) {
 				MedicalCenter mCenter = this.mCenterService.findById(mAppView.getCenterId());
 				mensaje = "<p>¡Hola " + user.getName() + " " + user.getLastName() + "!,</p>"
-						+ "<p>Su reserva médica ha sido cancelada.</p>"
+						+ "<p>Su reserva médica del " + strDate + " ha sido cancelada.</p>"
 						+ "<p>Si tiene dudas nos puede contactar al <a href='tel:" + mCenter.getPhone() + "'>"
 						+ mCenter.getPhone() + "</a> o al correo " + mCenter.getEmail() + "</p>"
 						+ "<p>Muchas gracias.</p>";
@@ -195,7 +225,8 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 						+ mAppView.getCenterAddress() + "</td></tr><tr><td><b>Edificio</b></td><td>"
 						+ mAppView.getBuildingName() + "</td></tr><tr><td><b>Piso</b></td><td>"
 						+ mAppView.getOfficeFloor() + "</td></tr><tr><td><b>Oficina</b></td><td>"
-						+ mAppView.getCenterName() + "</td></tr></table><br/><p>¡Te esperamos!.</p>";
+						+ mAppView.getCenterName() + "</td></tr><tr><td><b>Precio bono</b></td><td>$ "
+						+ mAppView.getReservedPrice() + "</td></tr></table><br/><p>¡Te esperamos!.</p>";
 				asunto = "Confirmación de asistencia";
 			} else {
 				return false;
@@ -232,5 +263,17 @@ public class MedicalAppointmentReservedServiceImpl implements MedicalAppointment
 		MedicalAppointmentReserved mApp = this.mAppointmentReservedRepository.save(reserva);
 		this.sendEmailChangeStatus(mApp, mAppView, status.getStatus());
 		return mApp;
+	}
+
+	@Override
+	public MedicalAppointmentView findPatientById(Long id) throws NotFoundException {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Long userId = Long.parseLong(auth.getPrincipal().toString());
+		User user = this.userService.findById(userId);
+		if (user.getRole().equals(Role.DOCTOR)) {
+			return this.mAppointmentViewRepository.findInViewByDoctorIdAndId(userId, id);
+		} else {
+			return this.mAppointmentViewRepository.findInViewByPatientIdAndId(userId, id);
+		}
 	}
 }

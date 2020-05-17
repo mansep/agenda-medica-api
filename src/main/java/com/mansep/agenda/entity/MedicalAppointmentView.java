@@ -23,6 +23,8 @@ public class MedicalAppointmentView implements Serializable {
     private Long reservedId;
     @Column(name = "RESERVED_STATUS")
     private String reservedStatus;
+    @Column(name = "RESERVED_PRICE")
+    private Long reservedPrice;
     @Column(name = "DOCTOR_RUT")
     private String doctorRut;
     @Column(name = "DOCTOR_ID")
@@ -43,6 +45,8 @@ public class MedicalAppointmentView implements Serializable {
     private String officeFloor;
     @Column(name = "SPECIALITY_ID")
     private Long specialityId;
+    @Column(name = "SPECIALITY_PRICE")
+    private Long specialityPrice;
     @Column(name = "SPECIALITY_CODE")
     private String specialityCode;
     @Column(name = "SPECIALITY_NAME")
@@ -85,6 +89,7 @@ public class MedicalAppointmentView implements Serializable {
         setId(mAppointmentView.getId());
         setReservedId(mAppointmentView.getReservedId());
         setReservedStatus(mAppointmentView.getReservedStatus());
+        setReservedPrice(mAppointmentView.getReservedPrice());
         setDoctorId(mAppointmentView.getDoctorId());
         setDoctorName(mAppointmentView.getDoctorName());
         setDoctorLastName(mAppointmentView.getDoctorLastName());
@@ -96,6 +101,7 @@ public class MedicalAppointmentView implements Serializable {
         setOfficeFloor(mAppointmentView.getOfficeFloor());
         setSpecialityCode(mAppointmentView.getSpecialityCode());
         setSpecialityId(mAppointmentView.getSpecialityId());
+        setSpecialityPrice(mAppointmentView.getSpecialityPrice());
         setSpecialityName(mAppointmentView.getSpecialityName());
         setBuildingCode(mAppointmentView.getBuildingCode());
         setBuildingId(mAppointmentView.getBuildingId());
@@ -117,6 +123,7 @@ public class MedicalAppointmentView implements Serializable {
         MedicalAppointmentViewDto mAppointment = new MedicalAppointmentViewDto();
         mAppointment.setId(this.getId());
         mAppointment.setReservedId(this.getReservedId());
+        mAppointment.setReservedPrice(this.getReservedPrice());
         mAppointment.setReservedStatus(this.getReservedStatus());
         mAppointment.setDoctorId(this.getDoctorId());
         mAppointment.setDoctorName(this.getDoctorName());
@@ -127,6 +134,7 @@ public class MedicalAppointmentView implements Serializable {
         mAppointment.setOfficeId(this.getOfficeId());
         mAppointment.setOfficeName(this.getOfficeName());
         mAppointment.setSpecialityCode(this.getSpecialityCode());
+        mAppointment.setSpecialityPrice(this.getSpecialityPrice());
         mAppointment.setSpecialityId(this.getSpecialityId());
         mAppointment.setSpecialityName(this.getSpecialityName());
         mAppointment.setOfficeFloor(this.getOfficeFloor());
@@ -376,5 +384,21 @@ public class MedicalAppointmentView implements Serializable {
 
     public void setReservedStatus(String reservedStatus) {
         this.reservedStatus = reservedStatus;
+    }
+
+    public Long getReservedPrice() {
+        return reservedPrice;
+    }
+
+    public void setReservedPrice(Long reservedPrice) {
+        this.reservedPrice = reservedPrice;
+    }
+
+    public Long getSpecialityPrice() {
+        return specialityPrice;
+    }
+
+    public void setSpecialityPrice(Long specialityPrice) {
+        this.specialityPrice = specialityPrice;
     }
 }

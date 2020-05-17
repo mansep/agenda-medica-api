@@ -61,6 +61,22 @@ public class MedicalAppointmentReservedController {
         }
     }
 
+    @GetMapping("/me/{id}")
+    public ResponseEntity<MedicalAppointmentViewDto> getAllMedicalAppointmentReservedByIdAndUser(
+            @PathVariable Long id) {
+        try {
+            MedicalAppointmentView mAppointmentReserveds = mAppointmentReservedService.findPatientById(id);
+            return ResponseEntity.ok(mAppointmentReserveds.toDto());
+        } catch (NotFoundException e) {
+            LOGGER.error("Error al cargar reserva", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar reserva", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<MedicalAppointmentReservedDto> getMedicalAppointmentReserved(@PathVariable Long id) {
         try {
@@ -91,7 +107,6 @@ public class MedicalAppointmentReservedController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
     @PutMapping("/{id}")
     public ResponseEntity<MedicalAppointmentReservedDto> updateMedicalAppointmentReserved(@PathVariable Long id,
             @RequestBody MedicalAppointmentReservedDto mAppointmentReserved) {
@@ -123,7 +138,6 @@ public class MedicalAppointmentReservedController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
     @PostMapping("/")
     public ResponseEntity<MedicalAppointmentReservedDto> createMedicalAppointmentReserved(
             @RequestBody MedicalAppointmentReservedDto mAppointmentReserved) {
